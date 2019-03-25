@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/knightjdr/gene-peptide/read"
+	"github.com/knightjdr/gene-peptide/stats"
 )
 
 func main() {
@@ -12,5 +13,9 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	read.Peptides(args.File, args.Pipeline, args.FDR, args.PeptideProbability)
+	// Read peptides from file.
+	peptides := read.Peptides(args.File, args.Pipeline, args.FDR, args.PeptideProbability)
+
+	// Count spectra.
+	stats.QuantifyPeptides(peptides)
 }

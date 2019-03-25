@@ -6,6 +6,7 @@ import (
 	"log"
 	"regexp"
 
+	"github.com/knightjdr/gene-peptide/typedef"
 	"github.com/spf13/afero"
 )
 
@@ -17,7 +18,7 @@ func msplitDIARawSequence(peptide string) string {
 	return sequence
 }
 
-func msplitDIA(file afero.File) []Peptide {
+func msplitDIA(file afero.File) []typedef.Peptide {
 	reader := csv.NewReader(file)
 	reader.Comma = '\t'
 	reader.LazyQuotes = true
@@ -28,7 +29,7 @@ func msplitDIA(file afero.File) []Peptide {
 		log.Fatalln(err)
 	}
 
-	peptides := make([]Peptide, 0)
+	peptides := make([]typedef.Peptide, 0)
 	for {
 		line, err := reader.Read()
 		if err != nil {
@@ -39,7 +40,7 @@ func msplitDIA(file afero.File) []Peptide {
 		}
 
 		sequence := msplitDIARawSequence(line[4])
-		peptides = append(peptides, Peptide{Modified: line[4], Sequence: sequence})
+		peptides = append(peptides, typedef.Peptide{Modified: line[4], Sequence: sequence})
 	}
 
 	return peptides

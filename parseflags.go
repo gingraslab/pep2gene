@@ -5,10 +5,12 @@ import (
 	"flag"
 	"os"
 	"strings"
+
+	"github.com/knightjdr/gene-peptide/typedef"
 )
 
 // ParseFlags parses command line arguments.
-func parseFlags() (params Parameters, err error) {
+func parseFlags() (params typedef.Parameters, err error) {
 	args := flag.NewFlagSet("args", flag.ContinueOnError)
 	database := args.String("db", "", "FASTA database")
 	fdr := args.Float64("fdr", 0.01, "FDR cutoff")
@@ -18,7 +20,7 @@ func parseFlags() (params Parameters, err error) {
 	pipeline := args.String("pipeline", "TPP", "Search engine type, should be one of MSPLIT_DDA, MSPLIT_DIA, TPP")
 	args.Parse(os.Args[1:])
 
-	params = Parameters{
+	params = typedef.Parameters{
 		Database:           *database,
 		FDR:                *fdr,
 		File:               *file,

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/knightjdr/gene-peptide/fs"
+	"github.com/knightjdr/gene-peptide/typedef"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -46,7 +47,7 @@ func TestTPP(t *testing.T) {
 	peptides := tpp(file, 0.85)
 
 	// TEST
-	wanted := []Peptide{
+	wanted := []typedef.Peptide{
 		{Decoy: false, Modified: "ABC", Sequence: "ABC"},
 		{Decoy: false, Modified: "JK[129]L", Sequence: "JKL"},
 	}

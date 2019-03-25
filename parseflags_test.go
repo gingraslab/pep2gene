@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/knightjdr/gene-peptide/typedef"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,7 +24,7 @@ func TestParseFlags(t *testing.T) {
 		"-pepprob", "0.9",
 		"-pipeline", "MSPLIT_DDA",
 	}
-	wantArgs := Parameters{
+	wantArgs := typedef.Parameters{
 		Database:           "database.fasta",
 		FDR:                0.05,
 		File:               "peptide.txt",
@@ -39,7 +40,7 @@ func TestParseFlags(t *testing.T) {
 	os.Args = []string{
 		"cmd",
 	}
-	wantArgs = Parameters{
+	wantArgs = typedef.Parameters{
 		Database:           "",
 		FDR:                0.01,
 		File:               "",

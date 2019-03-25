@@ -2,32 +2,31 @@
 package read
 
 import (
+	"errors"
 	"log"
 
 	"github.com/knightjdr/gene-peptide/fs"
+	"github.com/knightjdr/gene-peptide/typedef"
 )
 
-// Peptide contains the amino acid "Sequence" for a peptide, the "Modified" version of
-// the peptide and whether it is "Decoy"
-type Peptide struct {
-	Decoy    bool
-	Modified string
-	Sequence string
-}
-
 // Peptides is an interface for opening a peptide file and passing it to the correct parser
-func Peptides(filename string, pipeline string, fdr, peptideProbabilty float64) {
+func Peptides(filename string, pipeline string, fdr, peptideProbabilty float64) []typedef.Peptide {
 	file, err := fs.Instance.Open(filename)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	defer file.Close()
 
+	peptides := make([]typedef.Peptide, 0)
 	if pipeline == "TPP" {
-		tpp(file, peptideProbabilty)
+		peptides = tpp(file, peptideProbabilty)
 	} else if pipeline == "MSPLIT_DDA" {
-		msplitDDA(file, fdr)
+		peptides = msplitDDA(file, fdr)
 	} else if pipeline == "MSPLIT_DIA" {
-		msplitDIA(file)
+		peptides = msplitDIA(file)
+	} else {
+		log.Fatalln(errors.New("Unknown pipeline"))
 	}
+
+	return peptides
 }

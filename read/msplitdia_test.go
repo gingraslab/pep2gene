@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/knightjdr/gene-peptide/fs"
+	"github.com/knightjdr/gene-peptide/typedef"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -40,7 +41,7 @@ func TestMsplitDIA(t *testing.T) {
 	peptides := msplitDIA(file)
 
 	// TEST
-	wanted := []Peptide{
+	wanted := []typedef.Peptide{
 		{Decoy: false, Modified: "ABC", Sequence: "ABC"},
 		{Decoy: false, Modified: "DEF", Sequence: "DEF"},
 		{Decoy: false, Modified: "GHI", Sequence: "GHI"},
