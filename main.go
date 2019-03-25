@@ -17,5 +17,8 @@ func main() {
 	peptides := read.Peptides(args.File, args.Pipeline, args.FDR, args.PeptideProbability)
 
 	// Count spectra.
-	stats.QuantifyPeptides(peptides)
+	spectralCounts := stats.QuantifyPeptides(peptides)
+
+	// Read database.
+	db := read.Database(args.Database)
 }

@@ -11,8 +11,6 @@ import (
 )
 
 func tpp(file afero.File, peptideProbabilty float64) []typedef.Peptide {
-	scanner := bufio.NewScanner(file)
-
 	decoyRegex, _ := regexp.Compile("^<alternative_protein protein=\"DECOY")
 	modifiedRegex, _ := regexp.Compile("^<modification_info modified_peptide=\"([^\"]+)\"")
 	peptideRegex, _ := regexp.Compile("^<search_hit hit_rank=\"\\d+\" peptide=\"([^\"]+)\"")
@@ -20,6 +18,8 @@ func tpp(file afero.File, peptideProbabilty float64) []typedef.Peptide {
 
 	peptides := make([]typedef.Peptide, 0)
 	var currPeptide typedef.Peptide
+
+	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
 

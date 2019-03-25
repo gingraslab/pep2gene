@@ -20,7 +20,6 @@ func TestParseFlags(t *testing.T) {
 		"-db", "database.fasta",
 		"-fdr", "0.05",
 		"-file", "peptide.txt",
-		"-map", "gi-map.txt",
 		"-pepprob", "0.9",
 		"-pipeline", "MSPLIT_DDA",
 	}
@@ -28,7 +27,6 @@ func TestParseFlags(t *testing.T) {
 		Database:           "database.fasta",
 		FDR:                0.05,
 		File:               "peptide.txt",
-		MapFile:            "gi-map.txt",
 		PeptideProbability: 0.9,
 		Pipeline:           "MSPLIT_DDA",
 	}
@@ -44,7 +42,6 @@ func TestParseFlags(t *testing.T) {
 		Database:           "",
 		FDR:                0.01,
 		File:               "",
-		MapFile:            "",
 		PeptideProbability: 0.85,
 		Pipeline:           "TPP",
 	}

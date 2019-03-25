@@ -26,5 +26,14 @@ type PeptideStat struct {
 	Modified map[string]int
 }
 
+// Protein contains the protein name, gene ID and sequence for a protein
+type Protein struct {
+	GeneID   string
+	GeneName string
+	GI       string
+	Name     string
+	Sequence string
+}
+
 // SpectralCounts is a map of peptides to their spectral counts and modified forms
 type SpectralCounts map[string]*PeptideStat
