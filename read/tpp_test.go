@@ -1,4 +1,4 @@
-package peptides
+package read
 
 import (
 	"testing"
@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var text = `<search_hit hit_rank="1" peptide="ABC">
+var tppText = `<search_hit hit_rank="1" peptide="ABC">
 <peptideprophet_result probability="0.95">
 </peptideprophet_result>
 </search_hit>
@@ -38,7 +38,7 @@ func TestTPP(t *testing.T) {
 	afero.WriteFile(
 		fs.Instance,
 		"test/testfile.txt",
-		[]byte(text),
+		[]byte(tppText),
 		0444,
 	)
 

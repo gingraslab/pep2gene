@@ -1,4 +1,4 @@
-package peptides
+package read
 
 import (
 	"bufio"
@@ -9,15 +9,7 @@ import (
 	"github.com/spf13/afero"
 )
 
-// Peptide contains the amino acid "Sequence" for a peptide, the "Modified" version of
-// the peptide and whether it is "Decoy"
-type Peptide struct {
-	Decoy    bool
-	Modified string
-	Sequence string
-}
-
-func tpp(file afero.File, peptidProbabilty float64) []Peptide {
+func tpp(file afero.File, peptideProbabilty float64) []Peptide {
 	scanner := bufio.NewScanner(file)
 
 	decoyRegex, _ := regexp.Compile("^<alternative_protein protein=\"DECOY")
@@ -43,7 +35,7 @@ func tpp(file afero.File, peptidProbabilty float64) []Peptide {
 		} else if propabilityRegex.MatchString(line) {
 			probabilityMatches := propabilityRegex.FindStringSubmatch(line)
 			prob, _ := strconv.ParseFloat(probabilityMatches[1], 64)
-			if prob >= peptidProbabilty && !currPeptide.Decoy {
+			if prob >= peptideProbabilty && !currPeptide.Decoy {
 				peptides = append(peptides, currPeptide)
 			}
 		}

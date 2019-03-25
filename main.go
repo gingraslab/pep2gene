@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/knightjdr/gene-peptide/peptides"
+	"github.com/knightjdr/gene-peptide/read"
 )
 
 func main() {
@@ -12,5 +12,5 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	peptides.Read(args.File, args.Pipeline, args.FDR, args.PeptideProbability)
+	read.Peptides(args.File, args.Pipeline, args.FDR, args.PeptideProbability)
 }
