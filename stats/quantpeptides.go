@@ -1,11 +1,11 @@
 // Package stats generates summary statistics
 package stats
 
-import "github.com/knightjdr/gene-peptide/typedef"
+import "github.com/knightjdr/gene-peptide/types"
 
 // QuantifyPeptides sums the spectral counts for peptides in both raw and modified forms
-func QuantifyPeptides(peptides []typedef.Peptide) typedef.SpectralCounts {
-	spectralCounts := make(typedef.SpectralCounts)
+func QuantifyPeptides(peptides []types.Peptide) types.Peptides {
+	spectralCounts := make(types.Peptides)
 	for _, peptide := range peptides {
 		if _, ok := spectralCounts[peptide.Sequence]; ok {
 			spectralCounts[peptide.Sequence].Count = spectralCounts[peptide.Sequence].Count + 1
@@ -15,7 +15,7 @@ func QuantifyPeptides(peptides []typedef.Peptide) typedef.SpectralCounts {
 				spectralCounts[peptide.Sequence].Modified[peptide.Modified] = 1
 			}
 		} else {
-			spectralCounts[peptide.Sequence] = &typedef.PeptideStat{
+			spectralCounts[peptide.Sequence] = &types.PeptideStat{
 				Count:    1,
 				Modified: map[string]int{peptide.Modified: 1},
 			}

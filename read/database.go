@@ -7,10 +7,10 @@ import (
 	"strings"
 
 	"github.com/knightjdr/gene-peptide/fs"
-	"github.com/knightjdr/gene-peptide/typedef"
+	"github.com/knightjdr/gene-peptide/types"
 )
 
-func appendDatabase(proteins []typedef.Protein, currProtein typedef.Protein, sequence *strings.Builder) []typedef.Protein {
+func appendDatabase(proteins []types.Protein, currProtein types.Protein, sequence *strings.Builder) []types.Protein {
 	str := sequence.String()
 	if str != "" {
 		currProtein.Sequence = str
@@ -21,7 +21,7 @@ func appendDatabase(proteins []typedef.Protein, currProtein typedef.Protein, seq
 }
 
 // Database reads a fasta database
-func Database(filename string) []typedef.Protein {
+func Database(filename string) []types.Protein {
 	file, err := fs.Instance.Open(filename)
 	if err != nil {
 		log.Fatalln(err)
@@ -30,8 +30,8 @@ func Database(filename string) []typedef.Protein {
 
 	nameRegex, _ := regexp.Compile("^>gi\\|(\\d+)\\|gn\\|(\\w+):(\\d+)\\| (.+) \\[")
 
-	var currProtein typedef.Protein
-	proteins := make([]typedef.Protein, 0)
+	var currProtein types.Protein
+	proteins := make([]types.Protein, 0)
 	var sequence strings.Builder
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {

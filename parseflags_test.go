@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/knightjdr/gene-peptide/typedef"
+	"github.com/knightjdr/gene-peptide/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -18,15 +18,19 @@ func TestParseFlags(t *testing.T) {
 	os.Args = []string{
 		"cmd",
 		"-db", "database.fasta",
+		"-enzyme", "Trypsin",
 		"-fdr", "0.05",
 		"-file", "peptide.txt",
+		"-missedcleavages", "2",
 		"-pepprob", "0.9",
 		"-pipeline", "MSPLIT_DDA",
 	}
-	wantArgs := typedef.Parameters{
+	wantArgs := types.Parameters{
 		Database:           "database.fasta",
+		Enzyme:             "trypsin",
 		FDR:                0.05,
 		File:               "peptide.txt",
+		MissedCleavages:    2,
 		PeptideProbability: 0.9,
 		Pipeline:           "MSPLIT_DDA",
 	}
@@ -38,14 +42,16 @@ func TestParseFlags(t *testing.T) {
 	os.Args = []string{
 		"cmd",
 	}
-	wantArgs = typedef.Parameters{
+	wantArgs = types.Parameters{
 		Database:           "",
+		Enzyme:             "",
 		FDR:                0.01,
 		File:               "",
+		MissedCleavages:    1,
 		PeptideProbability: 0.85,
 		Pipeline:           "TPP",
 	}
-	wantErr := errors.New("missing FASTA database; missing search result peptide file; missing gene ID mapping file")
+	wantErr := errors.New("missing FASTA database; missing search result peptide file")
 	args, err = parseFlags()
 	assert.NotNil(t, err, "Missing arguments should return error")
 	assert.Equal(t, wantArgs, args, "Default arguments were not returned")

@@ -6,18 +6,18 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/knightjdr/gene-peptide/typedef"
+	"github.com/knightjdr/gene-peptide/types"
 	"github.com/spf13/afero"
 )
 
-func tpp(file afero.File, peptideProbabilty float64) []typedef.Peptide {
+func tpp(file afero.File, peptideProbabilty float64) []types.Peptide {
 	decoyRegex, _ := regexp.Compile("^<alternative_protein protein=\"DECOY")
 	modifiedRegex, _ := regexp.Compile("^<modification_info modified_peptide=\"([^\"]+)\"")
 	peptideRegex, _ := regexp.Compile("^<search_hit hit_rank=\"\\d+\" peptide=\"([^\"]+)\"")
 	propabilityRegex, _ := regexp.Compile("^<peptideprophet_result probability=\"([0-9\\.]+)")
 
-	peptides := make([]typedef.Peptide, 0)
-	var currPeptide typedef.Peptide
+	peptides := make([]types.Peptide, 0)
+	var currPeptide types.Peptide
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {

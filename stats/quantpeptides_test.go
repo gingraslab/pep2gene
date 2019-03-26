@@ -3,12 +3,12 @@ package stats
 import (
 	"testing"
 
-	"github.com/knightjdr/gene-peptide/typedef"
+	"github.com/knightjdr/gene-peptide/types"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestQuantPeptides(t *testing.T) {
-	peptides := []typedef.Peptide{
+	peptides := []types.Peptide{
 		{Modified: "ABC", Sequence: "ABC"},
 		{Modified: "AB[mod]C", Sequence: "ABC"},
 		{Modified: "AB[mod]C", Sequence: "ABC"},
@@ -18,15 +18,15 @@ func TestQuantPeptides(t *testing.T) {
 		{Modified: "DE[mod]F[mod]", Sequence: "DEF"},
 		{Modified: "DE[mod]F[mod]", Sequence: "DEF"},
 	}
-	wanted := typedef.SpectralCounts{
-		"ABC": &typedef.PeptideStat{
+	wanted := types.Peptides{
+		"ABC": &types.PeptideStat{
 			Count: 3,
 			Modified: map[string]int{
 				"ABC":      1,
 				"AB[mod]C": 2,
 			},
 		},
-		"DEF": &typedef.PeptideStat{
+		"DEF": &types.PeptideStat{
 			Count: 5,
 			Modified: map[string]int{
 				"DEF":           2,

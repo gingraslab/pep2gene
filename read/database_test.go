@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/knightjdr/gene-peptide/fs"
-	"github.com/knightjdr/gene-peptide/typedef"
+	"github.com/knightjdr/gene-peptide/types"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
@@ -22,14 +22,14 @@ MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP
 `
 
 func TestAppendDatabase(t *testing.T) {
-	currProtein := typedef.Protein{
+	currProtein := types.Protein{
 		GeneID:   "123",
 		GeneName: "abc",
 		GI:       "456",
 		Name:     "ABC",
 		Sequence: "",
 	}
-	proteins := make([]typedef.Protein, 0)
+	proteins := make([]types.Protein, 0)
 	var sequence strings.Builder
 
 	// TEST1: an empty string build
@@ -39,7 +39,7 @@ func TestAppendDatabase(t *testing.T) {
 	// TEST1: an empty string build
 	sequence.WriteString("XYZ")
 	result = appendDatabase(proteins, currProtein, &sequence)
-	wanted := []typedef.Protein{
+	wanted := []types.Protein{
 		{GeneID: "123", GeneName: "abc", GI: "456", Name: "ABC", Sequence: "XYZ"},
 	}
 	assert.Equal(t, wanted, result, "Should return updated protein database")
@@ -61,7 +61,7 @@ func TestDatabase(t *testing.T) {
 		0444,
 	)
 
-	wanted := []typedef.Protein{
+	wanted := []types.Protein{
 		{
 			GeneID:   "11188",
 			GeneName: "NISCH",

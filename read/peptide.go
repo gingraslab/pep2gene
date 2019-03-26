@@ -6,18 +6,18 @@ import (
 	"log"
 
 	"github.com/knightjdr/gene-peptide/fs"
-	"github.com/knightjdr/gene-peptide/typedef"
+	"github.com/knightjdr/gene-peptide/types"
 )
 
 // Peptides is an interface for opening a peptide file and passing it to the correct parser
-func Peptides(filename string, pipeline string, fdr, peptideProbabilty float64) []typedef.Peptide {
+func Peptides(filename string, pipeline string, fdr, peptideProbabilty float64) []types.Peptide {
 	file, err := fs.Instance.Open(filename)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	defer file.Close()
 
-	peptides := make([]typedef.Peptide, 0)
+	peptides := make([]types.Peptide, 0)
 	if pipeline == "TPP" {
 		peptides = tpp(file, peptideProbabilty)
 	} else if pipeline == "MSPLIT_DDA" {
