@@ -4,6 +4,7 @@ package match
 import (
 	"strings"
 
+	"github.com/knightjdr/gene-peptide/digestion"
 	"github.com/knightjdr/gene-peptide/helpers"
 
 	"github.com/knightjdr/gene-peptide/types"
@@ -31,9 +32,25 @@ func fullSequence(peptides types.Peptides, db []types.Protein) (types.Peptides, 
 }
 
 func trypticSequence(peptides types.Peptides, db []types.Protein, enzyme string, missed int) (types.Peptides, types.Genes) {
-	genes := make(types.Genes)
 	for peptide := range peptides {
 		peptides[peptide].Genes = make([]string, 0)
+	}
+
+	genes := make(types.Genes)
+	for _, entry := range db {
+		digested := digestion.Digest(entry.Sequence, enzyme, missed)
+		for peptide := range peptides {
+			if _, ok := digested[peptide]; ok {
+				peptides[peptide].Genes = append(peptides[peptide].Genes, entry.GeneID)
+				if _, ok := genes[entry.GeneID]; ok {
+					genes[entry.GeneID].Peptides = append(genes[entry.GeneID].Peptides, peptide)
+				} else {
+					genes[entry.GeneID] = &types.Gene{
+						Peptides: []string{peptide},
+					}
+				}
+			}
+		}
 	}
 	return peptides, genes
 }

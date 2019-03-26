@@ -16,7 +16,7 @@ func parseFlags() (params types.Parameters, err error) {
 	enzyme := args.String("enzyme", "", "Cleavage enzyme")
 	fdr := args.Float64("fdr", 0.01, "FDR cutoff")
 	file := args.String("file", "", "File to process")
-	missedCleavages := args.Int("missedcleavages", 1, "Max number of missed cleavages")
+	missedCleavages := args.Int("missedcleavages", 0, "Max number of missed cleavages")
 	pepprob := args.Float64("pepprob", 0.85, "TPP peptide probability cutoff")
 	pipeline := args.String("pipeline", "TPP", "Search engine type, should be one of MSPLIT_DDA, MSPLIT_DIA, TPP")
 	args.Parse(os.Args[1:])
@@ -47,13 +47,34 @@ func parseFlags() (params types.Parameters, err error) {
 	}
 
 	// Set TPP as the default search engine to parse if selected engine is not recognized.
-	availableEngines := map[string]int{
-		"MSPLIT_DDA": 1,
-		"MSPLIT_DIA": 1,
-		"TPP":        1,
+	availableEngines := map[string]bool{
+		"MSPLIT_DDA": true,
+		"MSPLIT_DIA": true,
+		"TPP":        true,
 	}
 	if _, ok := availableEngines[params.Pipeline]; !ok {
 		params.Pipeline = "TPP"
+	}
+
+	// Clear enzyme if requested enzyme is not recognized
+	availableEnzymes := map[string]bool{
+		"arg-c":        true,
+		"asp-n":        true,
+		"asp-n_ambic":  true,
+		"chymotrypsin": true,
+		"cnbr":         true,
+		"lys-c":        true,
+		"lys-c/p":      true,
+		"lys-n":        true,
+		"pepsina":      true,
+		"trypchymo":    true,
+		"trypsin":      true,
+		"trypsin/p":    true,
+		"v8-de":        true,
+		"v8-e":         true,
+	}
+	if _, ok := availableEnzymes[params.Enzyme]; params.Enzyme != "" && !ok {
+		params.Enzyme = ""
 	}
 	return
 }
