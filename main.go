@@ -15,17 +15,26 @@ func main() {
 	}
 
 	// Read peptides from file.
-	peptides := read.Peptides(args.File, args.Pipeline, args.FDR, args.PeptideProbability)
+	peptideList := read.Peptides(args.File, args.Pipeline, args.FDR, args.PeptideProbability)
 
 	// Count spectra.
-	peptideSummary := stats.QuantifyPeptides(peptides)
+	peptideSummary := stats.QuantifyPeptides(peptideList)
 
 	// Read database.
 	db := read.Database(args.Database)
 
-	// Match peptides to genes
-	_, matchedGenes := match.Peptides(peptideSummary, db, args.Enzyme, args.MissedCleavages)
+	// Match genes to peptides to peptides to genes
+	matchedPeptides, matchedGenes := match.Peptides(peptideSummary, db, args.Enzyme, args.MissedCleavages)
 
 	// Find shared and subsumed genes.
-	match.SharedSubsumed(matchedGenes)
+	genes := match.SharedSubsumed(matchedGenes)
+
+	// Filter out subsumed genes from peptides
+	peptides := match.Filter(matchedPeptides, genes)
+
+	// Find unique peptides for each gene
+	genes = match.Unique(peptides, genes)
+
+	// Sum spectra for each gene
+	match.Count(peptides, genes)
 }

@@ -1,12 +1,19 @@
 // Package types contains type definitions used throughout gene-peptide
 package types
 
+import (
+	"github.com/knightjdr/gene-peptide/helpers"
+)
+
 // Gene contains peptides matched to genes, genes with shared peptides and subsumed genes
 type Gene struct {
-	IsSubsumed bool
-	Peptides   []string
-	Shared     []string
-	Subsumed   []string
+	IsSubsumed   bool
+	PeptideCount map[string]float64
+	Peptides     []string
+	Shared       []string
+	Count        float64
+	Subsumed     []string
+	Unique       int
 }
 
 // Genes is a map of gene IDS to their peptide and gene info
@@ -38,6 +45,20 @@ type PeptideStat struct {
 	Count    int
 	Genes    []string
 	Modified map[string]int
+}
+
+// Copy will copy a PeptideStat to a new pointer
+func (p PeptideStat) Copy() *PeptideStat {
+	genes := make([]string, len(p.Genes))
+	copy(genes, p.Genes)
+	copyPeptideState := &PeptideStat{
+		Count: p.Count,
+		Genes: genes,
+	}
+	if p.Modified != nil {
+		copyPeptideState.Modified = helpers.CopyStringIntMap(p.Modified)
+	}
+	return copyPeptideState
 }
 
 // Protein contains the protein name, gene ID and sequence for a protein

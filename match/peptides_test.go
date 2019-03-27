@@ -20,6 +20,7 @@ func TestPeptides(t *testing.T) {
 		"ABCK": &types.PeptideStat{},
 		"DEFK": &types.PeptideStat{},
 		"GHIK": &types.PeptideStat{},
+		"JLLK": &types.PeptideStat{},
 	}
 
 	// TEST1: match against full sequence
