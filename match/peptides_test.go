@@ -62,7 +62,7 @@ func TestPeptides(t *testing.T) {
 	assert.Equal(t, wantedPeptides, matchedPeptides, "Should match genes to peptides")
 	assert.Equal(t, wantedGenes, matchedGenes, "Should match peptides to genes")
 
-	// TEST2: match against tryptic sequence
+	// TEST2: match against digested sequence
 	matchedPeptides, matchedGenes = Peptides(peptides, db, "trypsin", 1)
 	for gene := range matchedGenes {
 		sort.Strings(matchedGenes[gene].Peptides)

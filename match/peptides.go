@@ -37,7 +37,7 @@ func fullSequence(peptides types.Peptides, db []types.Protein) (types.Peptides, 
 	return matchedPeptides, genes
 }
 
-func trypticSequence(peptides types.Peptides, db []types.Protein, enzyme string, missed int) (types.Peptides, types.Genes) {
+func digestedSequence(peptides types.Peptides, db []types.Protein, enzyme string, missed int) (types.Peptides, types.Genes) {
 	matchedPeptides := make(types.Peptides, len(peptides))
 
 	// Allocate peptide map.
@@ -79,5 +79,5 @@ func Peptides(peptides types.Peptides, db []types.Protein, enzyme string, missed
 	if enzyme == "" {
 		return fullSequence(peptides, db)
 	}
-	return trypticSequence(peptides, db, enzyme, missed)
+	return digestedSequence(peptides, db, enzyme, missed)
 }
