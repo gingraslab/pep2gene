@@ -63,6 +63,7 @@ type Parameters struct {
 	File               string
 	MapFile            string
 	MissedCleavages    int
+	OutFormat          string
 	PeptideProbability float64
 	Pipeline           string
 }

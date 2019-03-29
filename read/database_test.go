@@ -61,7 +61,7 @@ func TestDatabase(t *testing.T) {
 		0444,
 	)
 
-	wanted := []types.Protein{
+	wantedDB := []types.Protein{
 		{
 			GeneID:   "11188",
 			GeneName: "NISCH",
@@ -84,5 +84,12 @@ func TestDatabase(t *testing.T) {
 			Sequence: "MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP",
 		},
 	}
-	assert.Equal(t, wanted, Database("test/testfile.txt"), "Should parse proteins from database")
+	wantedGeneMap := map[string]string{
+		"11188": "NISCH",
+		"5573":  "PRKAR1A",
+		"56987": "BBX",
+	}
+	resultDB, resultGeneMap := Database("test/testfile.txt")
+	assert.Equal(t, wantedDB, resultDB, "Should parse proteins from database")
+	assert.Equal(t, wantedGeneMap, resultGeneMap, "Should generate gene ID to name map")
 }

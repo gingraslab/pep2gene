@@ -22,6 +22,7 @@ func TestParseFlags(t *testing.T) {
 		"-fdr", "0.05",
 		"-file", "peptide.txt",
 		"-missedcleavages", "2",
+		"-output", "scl",
 		"-pepprob", "0.9",
 		"-pipeline", "MSPLIT_DDA",
 	}
@@ -31,6 +32,7 @@ func TestParseFlags(t *testing.T) {
 		FDR:                0.05,
 		File:               "peptide.txt",
 		MissedCleavages:    2,
+		OutFormat:          "scl",
 		PeptideProbability: 0.9,
 		Pipeline:           "MSPLIT_DDA",
 	}
@@ -49,6 +51,7 @@ func TestParseFlags(t *testing.T) {
 		FDR:                0.01,
 		File:               "",
 		MissedCleavages:    0,
+		OutFormat:          "tsv",
 		PeptideProbability: 0.85,
 		Pipeline:           "TPP",
 	}
@@ -66,10 +69,12 @@ func TestParseFlags(t *testing.T) {
 		"-fdr", "0.05",
 		"-file", "peptide.txt",
 		"-missedcleavages", "2",
+		"-output", "Unknown",
 		"-pepprob", "0.9",
 		"-pipeline", "Unknown",
 	}
 	args, _ = parseFlags()
 	assert.Equal(t, "", args.Enzyme, "Should clear enzyme when arg not recognized")
+	assert.Equal(t, "tsv", args.OutFormat, "Should set output format to tsv when arg not recognized")
 	assert.Equal(t, "TPP", args.Pipeline, "Should set pipeline to TPP when arg not recognized")
 }

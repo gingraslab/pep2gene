@@ -1,22 +1,25 @@
 package digestion
 
 import (
+	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestCut(t *testing.T) {
-	re := "([KR])[^P]"
+	afterRegex, _ := regexp.Compile("^P")
+	cutRegex, _ := regexp.Compile("([KR])")
 	// TEST1: no missed cleavages
-	sequence := "ABCKDEFRPGHIRJLLKXYZ"
+	sequence := "ABCKDEFRPGHIRJLLKKXYZ"
 	wanted := map[string]bool{
 		"ABCK":      true,
 		"DEFRPGHIR": true,
 		"JLLK":      true,
+		"K":         true,
 		"XYZ":       true,
 	}
-	assert.Equal(t, wanted, cut(sequence, re, "c", 0), "Should produce a slice of single cleavage peptides")
+	assert.Equal(t, wanted, cut(sequence, "c", cutRegex, afterRegex, 0), "Should produce a slice of single cleavage peptides")
 
 	// TEST2: 1 missed cleavage
 	sequence = "ABCKDEFRPGHIRJLLKXYZ"
@@ -29,7 +32,7 @@ func TestCut(t *testing.T) {
 		"DEFRPGHIRJLLK": true,
 		"JLLKXYZ":       true,
 	}
-	assert.Equal(t, wanted, cut(sequence, re, "c", 1), "Should produce a slice including single missed cleavage peptides")
+	assert.Equal(t, wanted, cut(sequence, "c", cutRegex, afterRegex, 1), "Should produce a slice including single missed cleavage peptides")
 
 	// TEST3: 2 missed cleavages
 	sequence = "ABCKDEFRPGHIRJLLKXYZ"
@@ -44,5 +47,5 @@ func TestCut(t *testing.T) {
 		"ABCKDEFRPGHIRJLLK": true,
 		"DEFRPGHIRJLLKXYZ":  true,
 	}
-	assert.Equal(t, wanted, cut(sequence, re, "c", 2), "Should produce a slice including single and double missed cleavage peptides")
+	assert.Equal(t, wanted, cut(sequence, "c", cutRegex, afterRegex, 2), "Should produce a slice including single and double missed cleavage peptides")
 }

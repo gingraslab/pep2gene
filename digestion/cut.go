@@ -5,9 +5,16 @@ import (
 	"strings"
 )
 
-func cut(sequence, re, terminus string, missedCleavages int) map[string]bool {
-	cutRegex, _ := regexp.Compile(re)
-	matches := cutRegex.FindAllStringIndex(sequence, -1)
+func cut(sequence, terminus string, cutRegex, afterRegex *regexp.Regexp, missedCleavages int) map[string]bool {
+	possibleMatches := cutRegex.FindAllStringIndex(sequence, -1)
+	matches := make([]int, 0)
+	for i := range possibleMatches {
+		matchIndex := possibleMatches[i][0]
+		trailingSequence := sequence[matchIndex+1:]
+		if !afterRegex.MatchString(trailingSequence) {
+			matches = append(matches, matchIndex)
+		}
+	}
 
 	// Generate peptides
 	singleCuts := extractPeptides(sequence, terminus, matches)

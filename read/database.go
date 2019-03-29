@@ -20,8 +20,8 @@ func appendDatabase(proteins []types.Protein, currProtein types.Protein, sequenc
 	return proteins
 }
 
-// Database reads a fasta database
-func Database(filename string) []types.Protein {
+// Database reads a fasta database and generates a gene ID to gene name map
+func Database(filename string) ([]types.Protein, map[string]string) {
 	file, err := fs.Instance.Open(filename)
 	if err != nil {
 		log.Fatalln(err)
@@ -30,10 +30,11 @@ func Database(filename string) []types.Protein {
 
 	nameRegex, _ := regexp.Compile("^>gi\\|(\\d+)\\|gn\\|(\\w+):(\\d+)\\| (.+) \\[")
 
-	var currProtein types.Protein
+	geneMap := make(map[string]string, 0)
 	proteins := make([]types.Protein, 0)
 	var sequence strings.Builder
 	scanner := bufio.NewScanner(file)
+	var currProtein types.Protein
 	for scanner.Scan() {
 		line := scanner.Text()
 
@@ -45,11 +46,12 @@ func Database(filename string) []types.Protein {
 			currProtein.GI = nameMatches[1]
 			currProtein.Name = nameMatches[4]
 			currProtein.Sequence = ""
+			geneMap[nameMatches[3]] = nameMatches[2]
 		} else {
 			sequence.WriteString(line)
 		}
 	}
 	proteins = appendDatabase(proteins, currProtein, &sequence)
 
-	return proteins
+	return proteins, geneMap
 }

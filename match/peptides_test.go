@@ -11,6 +11,7 @@ import (
 func TestPeptides(t *testing.T) {
 	db := []types.Protein{
 		{GeneID: "123", Sequence: "XXXKABCKXXX"},
+		{GeneID: "123", Sequence: "XXXKABCKXXX"},
 		{GeneID: "456", Sequence: "DEFKABCKXXX"},
 		{GeneID: "789", Sequence: "GHIKGHIK"},
 		{GeneID: "101112", Sequence: "XXXKABCK"},

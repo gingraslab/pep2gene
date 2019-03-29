@@ -1,6 +1,6 @@
 package digestion
 
-func extractPeptides(sequence, terminus string, matches [][]int) []string {
+func extractPeptides(sequence, terminus string, matches []int) []string {
 	// C-terminal cleavages should include the cut site
 	includeCutAA := 0
 	if terminus == "c" {
@@ -10,7 +10,7 @@ func extractPeptides(sequence, terminus string, matches [][]int) []string {
 	peptides := make([]string, 0)
 	lastCut := 0
 	for i := range matches {
-		cutSite := matches[i][0] + includeCutAA
+		cutSite := matches[i] + includeCutAA
 		cleavedPeptide := sequence[lastCut:cutSite]
 		peptides = append(peptides, cleavedPeptide)
 		lastCut = cutSite

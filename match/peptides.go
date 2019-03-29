@@ -34,6 +34,11 @@ func fullSequence(peptides types.Peptides, db []types.Protein) (types.Peptides, 
 			matchedPeptides[peptide].Genes = helpers.SliceUnique(matchedPeptides[peptide].Genes)
 		}
 	}
+
+	// Remove duplicates peptides in genes.
+	for gene := range genes {
+		genes[gene].Peptides = helpers.SliceUnique(genes[gene].Peptides)
+	}
 	return matchedPeptides, genes
 }
 
@@ -49,7 +54,7 @@ func digestedSequence(peptides types.Peptides, db []types.Protein, enzyme string
 	genes := make(types.Genes)
 	for _, entry := range db {
 		digested := digestion.Digest(entry.Sequence, enzyme, missed)
-		for peptide := range matchedPeptides {
+		for peptide := range peptides {
 			if _, ok := digested[peptide]; ok {
 				matchedPeptides[peptide].Genes = append(matchedPeptides[peptide].Genes, entry.GeneID)
 				if _, ok := genes[entry.GeneID]; ok {
@@ -61,10 +66,13 @@ func digestedSequence(peptides types.Peptides, db []types.Protein, enzyme string
 				}
 			}
 		}
+		if _, ok := genes[entry.GeneID]; ok {
+			genes[entry.GeneID].Peptides = helpers.SliceUnique(genes[entry.GeneID].Peptides)
+		}
 	}
 
-	// Remove peptides with no matches and remove duplicates.
-	for peptide := range matchedPeptides {
+	// Remove peptides with no matches and remove duplicate gene matches.
+	for peptide := range peptides {
 		if len(matchedPeptides[peptide].Genes) == 0 {
 			delete(matchedPeptides, peptide)
 		} else {

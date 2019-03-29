@@ -1,56 +1,74 @@
 // Package digestion contains functions for digesting a sequence to peptides
 package digestion
 
+import (
+	"fmt"
+	"regexp"
+)
+
 // Digest processes an amino acid sequence into peptides
 func Digest(sequence, enzyme string, missedClevages int) map[string]bool {
-	var re string
+	var match string
+	var afterExclude string
 	var terminus string
 	switch enzyme {
 	case "arg-c":
-		re = "([R])[^P]"
+		match = "R"
+		afterExclude = "P"
 		terminus = "c"
 	case "asp-n":
-		re = "([BD])"
+		match = "BD"
 		terminus = "n"
 	case "asp-n_ambic":
-		re = "([DE])"
+		match = "DE"
 		terminus = "n"
 	case "chymotrypsin":
-		re = "([FYWL])[^P]"
+		match = "FYWL"
+		afterExclude = "P"
 		terminus = "c"
 	case "cnbr":
-		re = "([M])"
+		match = "M"
 		terminus = "c"
 	case "lys-c":
-		re = "([K])[^P]"
+		match = "K"
+		afterExclude = "P"
 		terminus = "c"
 	case "lys-c/p":
-		re = "([K])"
+		match = "K"
 		terminus = "c"
 	case "lys-n":
-		re = "([K])"
+		match = "K"
 		terminus = "n"
 	case "pepsina":
-		re = "([FL]"
+		match = "FL]"
 		terminus = "c"
 	case "trypchymo":
-		re = "([FYWLKR])[^P]"
+		match = "FYWLKR"
+		afterExclude = "P"
 		terminus = "c"
 	case "trypsin":
-		re = "([KR])[^P]"
+		match = "KR"
+		afterExclude = "P"
 		terminus = "c"
 	case "trypsin/p":
-		re = "([KR])"
+		match = "KR"
 		terminus = "c"
 	case "v8-de":
-		re = "([BDEZ])[^P]"
+		match = "BDEZ"
+		afterExclude = "P"
 		terminus = "c"
 	case "v8-e":
-		re = "([EZ])[^P]"
+		match = "EZ"
+		afterExclude = "P"
 		terminus = "c"
 	default:
-		re = "([KR])[^P]"
+		match = "KR"
+		afterExclude = "P"
 		terminus = "c"
 	}
-	return cut(sequence, re, terminus, missedClevages)
+
+	afterRegex, _ := regexp.Compile(fmt.Sprintf("^%s", afterExclude))
+	cutRegex, _ := regexp.Compile(fmt.Sprintf("([%s])", match))
+
+	return cut(sequence, terminus, cutRegex, afterRegex, missedClevages)
 }

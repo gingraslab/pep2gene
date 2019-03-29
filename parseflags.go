@@ -17,6 +17,7 @@ func parseFlags() (params types.Parameters, err error) {
 	fdr := args.Float64("fdr", 0.01, "FDR cutoff")
 	file := args.String("file", "", "File to process")
 	missedCleavages := args.Int("missedcleavages", 0, "Max number of missed cleavages")
+	outFormat := args.String("output", "tsv", "Output file format")
 	pepprob := args.Float64("pepprob", 0.85, "TPP peptide probability cutoff")
 	pipeline := args.String("pipeline", "TPP", "Search engine type, should be one of MSPLIT_DDA, MSPLIT_DIA, TPP")
 	args.Parse(os.Args[1:])
@@ -27,6 +28,7 @@ func parseFlags() (params types.Parameters, err error) {
 		FDR:                *fdr,
 		File:               *file,
 		MissedCleavages:    *missedCleavages,
+		OutFormat:          *outFormat,
 		PeptideProbability: *pepprob,
 		Pipeline:           *pipeline,
 	}
@@ -76,5 +78,16 @@ func parseFlags() (params types.Parameters, err error) {
 	if _, ok := availableEnzymes[params.Enzyme]; params.Enzyme != "" && !ok {
 		params.Enzyme = ""
 	}
+
+	// Set tsv as the default output format if selected format is not recognized.
+	availableFormats := map[string]bool{
+		"csv": true,
+		"dsv": true,
+		"tsv": true,
+	}
+	if _, ok := availableFormats[params.OutFormat]; !ok {
+		params.OutFormat = "tsv"
+	}
+
 	return
 }

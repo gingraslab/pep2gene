@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/knightjdr/gene-peptide/match"
+	"github.com/knightjdr/gene-peptide/output"
 	"github.com/knightjdr/gene-peptide/read"
 	"github.com/knightjdr/gene-peptide/stats"
 )
@@ -21,7 +22,7 @@ func main() {
 	peptideSummary := stats.QuantifyPeptides(peptideList)
 
 	// Read database.
-	db := read.Database(args.Database)
+	db, geneIDtoName := read.Database(args.Database)
 
 	// Match genes to peptides to peptides to genes
 	matchedPeptides, matchedGenes := match.Peptides(peptideSummary, db, args.Enzyme, args.MissedCleavages)
@@ -36,5 +37,8 @@ func main() {
 	genes = match.Unique(peptides, genes)
 
 	// Sum spectra for each gene
-	match.Count(peptides, genes)
+	genes = match.Count(peptides, genes)
+
+	// Output
+	output.Write(args.File, args.OutFormat, genes, geneIDtoName, peptides)
 }
