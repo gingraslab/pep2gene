@@ -13,3 +13,7 @@
 
 gene-peptide
 testfiles
+*.dsv
+*.tsv
+*.csv
+*.swp
