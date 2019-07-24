@@ -24,21 +24,21 @@ func main() {
 	// Read database.
 	db, geneIDtoName := read.Database(args.Database)
 
-	// Match genes to peptides to peptides to genes
+	// Match genes to peptides and peptides to genes.
 	matchedPeptides, matchedGenes := match.Peptides(peptideSummary, db, args.Enzyme, args.MissedCleavages)
 
 	// Find shared and subsumed genes.
 	genes := match.SharedSubsumed(matchedGenes)
 
-	// Filter out subsumed genes from peptides
+	// Filter out subsumed genes from peptides.
 	peptides := match.Filter(matchedPeptides, genes)
 
-	// Find unique peptides for each gene
+	// Find unique peptides for each gene.
 	genes = match.Unique(peptides, genes)
 
-	// Sum spectra for each gene
+	// Sum spectra for each gene.
 	genes = match.Count(peptides, genes)
 
-	// Output
+	// Output.
 	output.Write(args.File, args.OutFormat, genes, geneIDtoName, peptides)
 }

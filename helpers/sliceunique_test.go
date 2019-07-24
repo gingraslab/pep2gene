@@ -8,6 +8,6 @@ import (
 
 func TestSliceUnique(t *testing.T) {
 	slice := []string{"a", "b", "c", "a", "a", "b"}
-	wanted := []string{"a", "b", "c"}
-	assert.Equal(t, wanted, SliceUnique(slice), "Should produce slice with unique values")
+	expected := []string{"a", "b", "c"}
+	assert.Equal(t, expected, SliceUnique(slice), "Should produce slice with unique values")
 }

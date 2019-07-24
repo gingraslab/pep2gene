@@ -47,9 +47,9 @@ func TestTPP(t *testing.T) {
 	peptides := tpp(file, 0.85)
 
 	// TEST
-	wanted := []types.Peptide{
+	expected := []types.Peptide{
 		{Decoy: false, Modified: "ABC", Sequence: "ABC"},
 		{Decoy: false, Modified: "JK[129]L", Sequence: "JKL"},
 	}
-	assert.Equal(t, wanted, peptides, "Should parse correct peptides from file")
+	assert.Equal(t, expected, peptides, "Should parse correct peptides from file")
 }

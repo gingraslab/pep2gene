@@ -82,12 +82,14 @@ type PeptideStat struct {
 	Count    int
 	Genes    []string
 	Modified map[string]int
+	Unique   bool
 }
 
 // Copy will copy a PeptideStat to a new pointer
 func (p PeptideStat) Copy() *PeptideStat {
 	copyPeptideState := &PeptideStat{
-		Count: p.Count,
+		Count:  p.Count,
+		Unique: p.Unique,
 	}
 	if p.Genes != nil {
 		genes := make([]string, len(p.Genes))

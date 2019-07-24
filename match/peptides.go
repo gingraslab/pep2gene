@@ -32,6 +32,9 @@ func fullSequence(peptides types.Peptides, db []types.Protein) (types.Peptides, 
 			delete(matchedPeptides, peptide)
 		} else {
 			matchedPeptides[peptide].Genes = helpers.SliceUnique(matchedPeptides[peptide].Genes)
+			if len(matchedPeptides[peptide].Genes) == 1 {
+				matchedPeptides[peptide].Unique = true
+			}
 		}
 	}
 
@@ -77,6 +80,9 @@ func digestedSequence(peptides types.Peptides, db []types.Protein, enzyme string
 			delete(matchedPeptides, peptide)
 		} else {
 			matchedPeptides[peptide].Genes = helpers.SliceUnique(matchedPeptides[peptide].Genes)
+			if len(matchedPeptides[peptide].Genes) == 1 {
+				matchedPeptides[peptide].Unique = true
+			}
 		}
 	}
 	return matchedPeptides, genes

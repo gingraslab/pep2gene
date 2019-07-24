@@ -36,7 +36,7 @@ func TestGeneCopy(t *testing.T) {
 	copiedGene.Subsumed = []string{}
 	copiedGene.Unique = 4
 	copiedGene.UniqueShared = 6
-	wanted := &Gene{
+	expected := &Gene{
 		Count:      5,
 		IsSubsumed: false,
 		PeptideCount: map[string]float64{
@@ -48,7 +48,7 @@ func TestGeneCopy(t *testing.T) {
 		Unique:       3,
 		UniqueShared: 5,
 	}
-	assert.Equal(t, wanted, originalGene, "Should not modify original Gene when copy changes")
+	assert.Equal(t, expected, originalGene, "Should not modify original Gene when copy changes")
 }
 
 func TestPeptideStatCopy(t *testing.T) {
@@ -59,6 +59,7 @@ func TestPeptideStatCopy(t *testing.T) {
 			"ABC": 1,
 			"DEF": 2,
 		},
+		Unique: true,
 	}
 
 	// TEST1
@@ -72,13 +73,14 @@ func TestPeptideStatCopy(t *testing.T) {
 		"ABC": 2,
 		"DEF": 4,
 	}
-	wanted := &PeptideStat{
+	expected := &PeptideStat{
 		Count: 5,
 		Genes: []string{"a", "b"},
 		Modified: map[string]int{
 			"ABC": 1,
 			"DEF": 2,
 		},
+		Unique: true,
 	}
-	assert.Equal(t, wanted, originalPeptideStat, "Should not modify original Peptide when copy changes")
+	assert.Equal(t, expected, originalPeptideStat, "Should not modify original Peptide when copy changes")
 }

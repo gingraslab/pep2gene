@@ -35,7 +35,7 @@ func TestSharedSubsumed(t *testing.T) {
 			Peptides: []string{"JKL", "MNO"},
 		},
 	}
-	wanted := types.Genes{
+	expected := types.Genes{
 		"5": &types.Gene{
 			IsSubsumed: false,
 			Peptides:   []string{"ABC", "DEF", "PQR"},
@@ -57,5 +57,5 @@ func TestSharedSubsumed(t *testing.T) {
 		sort.Strings(result[geneID].Peptides)
 		sort.Strings(result[geneID].Subsumed)
 	}
-	assert.Equal(t, wanted, result, "Should determine which genes share peptides and which are subsumed by others")
+	assert.Equal(t, expected, result, "Should determine which genes share peptides and which are subsumed by others")
 }

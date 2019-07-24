@@ -25,7 +25,7 @@ func TestPeptides(t *testing.T) {
 	}
 
 	// TEST1: match against full sequence
-	wantedGenes := types.Genes{
+	expectedGenes := types.Genes{
 		"123": &types.Gene{
 			Peptides: []string{"ABCK"},
 		},
@@ -42,7 +42,7 @@ func TestPeptides(t *testing.T) {
 			Peptides: []string{"DEFK"},
 		},
 	}
-	wantedPeptides := types.Peptides{
+	expectedPeptides := types.Peptides{
 		"ABCK": &types.PeptideStat{
 			Genes: []string{"101112", "123", "456"},
 		},
@@ -50,7 +50,8 @@ func TestPeptides(t *testing.T) {
 			Genes: []string{"131415", "456"},
 		},
 		"GHIK": &types.PeptideStat{
-			Genes: []string{"789"},
+			Genes:  []string{"789"},
+			Unique: true,
 		},
 	}
 	matchedPeptides, matchedGenes := Peptides(peptides, db, "", 0)
@@ -60,8 +61,8 @@ func TestPeptides(t *testing.T) {
 	for peptide := range matchedPeptides {
 		sort.Strings(matchedPeptides[peptide].Genes)
 	}
-	assert.Equal(t, wantedPeptides, matchedPeptides, "Should match genes to peptides")
-	assert.Equal(t, wantedGenes, matchedGenes, "Should match peptides to genes")
+	assert.Equal(t, expectedPeptides, matchedPeptides, "Should match genes to peptides")
+	assert.Equal(t, expectedGenes, matchedGenes, "Should match peptides to genes")
 
 	// TEST2: match against digested sequence
 	matchedPeptides, matchedGenes = Peptides(peptides, db, "trypsin", 1)
@@ -71,6 +72,6 @@ func TestPeptides(t *testing.T) {
 	for peptide := range matchedPeptides {
 		sort.Strings(matchedPeptides[peptide].Genes)
 	}
-	assert.Equal(t, wantedPeptides, matchedPeptides, "Should match genes to peptides")
-	assert.Equal(t, wantedGenes, matchedGenes, "Should match peptides to genes")
+	assert.Equal(t, expectedPeptides, matchedPeptides, "Should match genes to peptides")
+	assert.Equal(t, expectedGenes, matchedGenes, "Should match peptides to genes")
 }

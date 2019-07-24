@@ -18,7 +18,7 @@ func TestQuantPeptides(t *testing.T) {
 		{Modified: "DE[mod]F[mod]", Sequence: "DEF"},
 		{Modified: "DE[mod]F[mod]", Sequence: "DEF"},
 	}
-	wanted := types.Peptides{
+	expected := types.Peptides{
 		"ABC": &types.PeptideStat{
 			Count: 3,
 			Modified: map[string]int{
@@ -35,5 +35,5 @@ func TestQuantPeptides(t *testing.T) {
 			},
 		},
 	}
-	assert.Equal(t, wanted, QuantifyPeptides(peptides), "Should generate spectral counts for peptides")
+	assert.Equal(t, expected, QuantifyPeptides(peptides), "Should generate spectral counts for peptides")
 }

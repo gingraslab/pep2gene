@@ -22,7 +22,7 @@ func TestParseFlags(t *testing.T) {
 		"-fdr", "0.05",
 		"-file", "peptide.txt",
 		"-missedcleavages", "2",
-		"-output", "scl",
+		"-output", "dsv",
 		"-pepprob", "0.9",
 		"-pipeline", "MSPLIT_DDA",
 	}
@@ -32,7 +32,7 @@ func TestParseFlags(t *testing.T) {
 		FDR:                0.05,
 		File:               "peptide.txt",
 		MissedCleavages:    2,
-		OutFormat:          "scl",
+		OutFormat:          "dsv",
 		PeptideProbability: 0.9,
 		Pipeline:           "MSPLIT_DDA",
 	}

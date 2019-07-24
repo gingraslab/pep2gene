@@ -18,8 +18,8 @@ file.mzXML	6838	679.2222900390625	-1	JK[147]L	685.787	2	0.9044174425625956	1/P23
 
 func TestMsplitDIARawSequence(t *testing.T) {
 	peptide := "JK[147]L"
-	wanted := "JKL"
-	assert.Equal(t, wanted, msplitDIARawSequence(peptide), "Should strip modifications from peptide")
+	expected := "JKL"
+	assert.Equal(t, expected, msplitDIARawSequence(peptide), "Should strip modifications from peptide")
 }
 
 func TestMsplitDIA(t *testing.T) {
@@ -40,12 +40,11 @@ func TestMsplitDIA(t *testing.T) {
 	file, _ := fs.Instance.Open("test/testfile.txt")
 	peptides := msplitDIA(file)
 
-	// TEST
-	wanted := []types.Peptide{
+	expected := []types.Peptide{
 		{Decoy: false, Modified: "ABC", Sequence: "ABC"},
 		{Decoy: false, Modified: "DEF", Sequence: "DEF"},
 		{Decoy: false, Modified: "GHI", Sequence: "GHI"},
 		{Decoy: false, Modified: "JK[147]L", Sequence: "JKL"},
 	}
-	assert.Equal(t, wanted, peptides, "Should parse correct peptides from file")
+	assert.Equal(t, expected, peptides, "Should parse correct peptides from file")
 }

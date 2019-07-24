@@ -54,7 +54,7 @@ func TestCount(t *testing.T) {
 			},
 		},
 	}
-	wanted := types.Genes{
+	expected := types.Genes{
 		"1": &types.Gene{
 			Count: float64(35),
 			PeptideCount: map[string]float64{
@@ -90,5 +90,5 @@ func TestCount(t *testing.T) {
 			Unique: 0,
 		},
 	}
-	assert.Equal(t, wanted, Count(peptides, genes), "Should sum spectral counts")
+	assert.Equal(t, expected, Count(peptides, genes), "Should sum spectral counts")
 }

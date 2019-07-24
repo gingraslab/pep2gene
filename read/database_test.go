@@ -19,6 +19,14 @@ AGTRTDSREDEISPPPPNPVVKGRRRRGAI
 LDDNERSDIFDAMFSVSFIAGETVIQQGDE
 >gi|443497952|gn|BBX:56987| HMG box transcription factor BBX isoform 3 [Homo sapiens]
 MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP
+>sp|ALBU_BOVIN|gn|ALB:280717|
+MKWVTFISLLLLFSSAYSRGV
+>sp|CAS1_BOVIN|
+MKLLILTCLVAVALARPKHPIKHQGLPQEVLNENLLRFFVAPFPEVFGKE
+
+>Q9BYR8 SWISS-PROT:Q9BYR8 Tax_Id=9606 Gene_Symbol=KRTAP3-1;LOC100132802 Keratin-associated protein 3-1
+MYCCALRSCSVPTGPATTFCSFDKSCRCGVCLPSTCPHEISLLQPICCDTCPPPCCKPDT
+
 `
 
 func TestAppendDatabase(t *testing.T) {
@@ -39,10 +47,10 @@ func TestAppendDatabase(t *testing.T) {
 	// TEST1: an empty string build
 	sequence.WriteString("XYZ")
 	result = appendDatabase(proteins, currProtein, &sequence)
-	wanted := []types.Protein{
+	expected := []types.Protein{
 		{GeneID: "123", GeneName: "abc", GI: "456", Name: "ABC", Sequence: "XYZ"},
 	}
-	assert.Equal(t, wanted, result, "Should return updated protein database")
+	assert.Equal(t, expected, result, "Should return updated protein database")
 	assert.Equal(t, "", sequence.String(), "Should clear string builder")
 }
 
@@ -61,7 +69,7 @@ func TestDatabase(t *testing.T) {
 		0444,
 	)
 
-	wantedDB := []types.Protein{
+	expectedDB := []types.Protein{
 		{
 			GeneID:   "11188",
 			GeneName: "NISCH",
@@ -83,13 +91,37 @@ func TestDatabase(t *testing.T) {
 			Name:     "HMG box transcription factor BBX isoform 3",
 			Sequence: "MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP",
 		},
+		{
+			GeneID:   "280717",
+			GeneName: "ALB",
+			GI:       "ALBU_BOVIN",
+			Name:     "ALB",
+			Sequence: "MKWVTFISLLLLFSSAYSRGV",
+		},
+		{
+			GeneID:   "CAS1_BOVIN",
+			GeneName: "CAS1_BOVIN",
+			GI:       "CAS1_BOVIN",
+			Name:     "CAS1_BOVIN",
+			Sequence: "MKLLILTCLVAVALARPKHPIKHQGLPQEVLNENLLRFFVAPFPEVFGKE",
+		},
+		{
+			GeneID:   "Q9BYR8",
+			GeneName: "Q9BYR8",
+			GI:       "Q9BYR8",
+			Name:     "Q9BYR8",
+			Sequence: "MYCCALRSCSVPTGPATTFCSFDKSCRCGVCLPSTCPHEISLLQPICCDTCPPPCCKPDT",
+		},
 	}
-	wantedGeneMap := map[string]string{
-		"11188": "NISCH",
-		"5573":  "PRKAR1A",
-		"56987": "BBX",
+	expectedGeneMap := map[string]string{
+		"11188":      "NISCH",
+		"5573":       "PRKAR1A",
+		"56987":      "BBX",
+		"280717":     "ALB",
+		"CAS1_BOVIN": "CAS1_BOVIN",
+		"Q9BYR8":     "Q9BYR8",
 	}
 	resultDB, resultGeneMap := Database("test/testfile.txt")
-	assert.Equal(t, wantedDB, resultDB, "Should parse proteins from database")
-	assert.Equal(t, wantedGeneMap, resultGeneMap, "Should generate gene ID to name map")
+	assert.Equal(t, expectedDB, resultDB, "Should parse proteins from database")
+	assert.Equal(t, expectedGeneMap, resultGeneMap, "Should generate gene ID to name map")
 }

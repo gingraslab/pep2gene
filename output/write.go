@@ -54,6 +54,6 @@ func Write(filePath, format string, genes types.Genes, geneIDtoName map[string]s
 
 	for i, gene := range geneNames {
 		geneID := geneMap[gene]
-		writeGene(outfile, sep, i+1, gene, genes[geneID], geneMap, geneIDtoName)
+		writeGene(outfile, sep, i+1, gene, genes[geneID], geneMap, geneIDtoName, peptides)
 	}
 }

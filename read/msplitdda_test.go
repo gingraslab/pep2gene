@@ -18,14 +18,14 @@ file.mzXML	24029	24029	CID	753.6468	-2.1895566	4	R.JK+15.995L.L	gi|4503571|gn|EN
 
 func TestMsplitDDASequence(t *testing.T) {
 	peptide := "R.ABC.L"
-	wanted := "ABC"
-	assert.Equal(t, wanted, msplitDDASequence(peptide), "Should strip cleavage sites from peptide")
+	expected := "ABC"
+	assert.Equal(t, expected, msplitDDASequence(peptide), "Should strip cleavage sites from peptide")
 }
 
 func TestMsplitDDARawSequence(t *testing.T) {
 	peptide := "JK+15.995L"
-	wanted := "JKL"
-	assert.Equal(t, wanted, msplitDDARawSequence(peptide), "Should strip modifications from peptide")
+	expected := "JKL"
+	assert.Equal(t, expected, msplitDDARawSequence(peptide), "Should strip modifications from peptide")
 }
 
 func TestMsplitDDA(t *testing.T) {
@@ -47,10 +47,10 @@ func TestMsplitDDA(t *testing.T) {
 	peptides := msplitDDA(file, 0.01)
 
 	// TEST
-	wanted := []types.Peptide{
+	expected := []types.Peptide{
 		{Decoy: false, Modified: "ABC", Sequence: "ABC"},
 		{Decoy: false, Modified: "DEF", Sequence: "DEF"},
 		{Decoy: false, Modified: "JK+15.995L", Sequence: "JKL"},
 	}
-	assert.Equal(t, wanted, peptides, "Should parse correct peptides from file")
+	assert.Equal(t, expected, peptides, "Should parse correct peptides from file")
 }

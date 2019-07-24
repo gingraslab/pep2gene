@@ -24,7 +24,7 @@ func TestFilter(t *testing.T) {
 			Genes: []string{"6", "7", "8"},
 		},
 	}
-	wanted := types.Peptides{
+	expected := types.Peptides{
 		"ABC": &types.PeptideStat{
 			Genes: []string{"1", "2"},
 		},
@@ -35,5 +35,5 @@ func TestFilter(t *testing.T) {
 			Genes: []string{},
 		},
 	}
-	assert.Equal(t, wanted, Filter(peptides, genes), "Should filter out genes not present in gene map")
+	assert.Equal(t, expected, Filter(peptides, genes), "Should filter out genes not present in gene map")
 }

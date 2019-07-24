@@ -32,13 +32,16 @@ func TestUnique(t *testing.T) {
 			Genes: []string{"1", "2", "3"},
 		},
 		"DEF": &types.PeptideStat{
-			Genes: []string{"1"},
+			Genes:  []string{"1"},
+			Unique: true,
 		},
 		"GHI": &types.PeptideStat{
-			Genes: []string{"3"},
+			Genes:  []string{"3"},
+			Unique: true,
 		},
 		"JKL": &types.PeptideStat{
-			Genes: []string{"3"},
+			Genes:  []string{"3"},
+			Unique: true,
 		},
 		"MNO": &types.PeptideStat{
 			Genes: []string{"4", "5"},
@@ -47,7 +50,7 @@ func TestUnique(t *testing.T) {
 			Genes: []string{"4", "5", "6"},
 		},
 	}
-	wanted := types.Genes{
+	expected := types.Genes{
 		"1": &types.Gene{
 			Peptides: []string{"ABC", "DEF"},
 			Unique:   1,
@@ -73,5 +76,5 @@ func TestUnique(t *testing.T) {
 			UniqueShared: 1,
 		},
 	}
-	assert.Equal(t, wanted, Unique(peptides, genes), "Should count unique peptides per gene")
+	assert.Equal(t, expected, Unique(peptides, genes), "should count unique peptides per gene")
 }

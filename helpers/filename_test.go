@@ -8,6 +8,6 @@ import (
 
 func TestFilename(t *testing.T) {
 	path := "/a/b/c/file.txt"
-	wanted := "file"
-	assert.Equal(t, wanted, Filename(path), "Should return the filename without its extension")
+	expected := "file"
+	assert.Equal(t, expected, Filename(path), "Should return the filename without its extension")
 }

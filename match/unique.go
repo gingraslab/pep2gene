@@ -30,7 +30,7 @@ func Unique(peptides types.Peptides, genes types.Genes) types.Genes {
 			}
 		} else {
 			for _, peptide := range updatedGenes[gene].Peptides {
-				if len(peptides[peptide].Genes) == 1 {
+				if peptides[peptide].Unique {
 					updatedGenes[gene].Unique += float64(1)
 				}
 			}

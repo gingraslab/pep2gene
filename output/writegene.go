@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/afero"
 )
 
-func writePeptide(file afero.File, sep rune, peptideCount map[string]float64) {
+func writePeptide(file afero.File, sep rune, peptideCount map[string]float64, peptides types.Peptides) {
 	sequences := make([]string, 0)
 	for sequence := range peptideCount {
 		sequences = append(sequences, sequence)
@@ -19,11 +19,21 @@ func writePeptide(file afero.File, sep rune, peptideCount map[string]float64) {
 
 	for _, sequence := range sequences {
 		spectralCount := int(math.Round(peptideCount[sequence]))
-		file.WriteString(fmt.Sprintf("%[2]s%[1]s%[3]d%[1]s\n", string(sep), sequence, spectralCount))
+		unique := "no"
+		file.WriteString(fmt.Sprintf("%[2]s%[1]s%[3]d%[1]s%[4]s\n", string(sep), sequence, spectralCount, unique))
 	}
 }
 
-func writeGene(file afero.File, sep rune, index int, gene string, details *types.Gene, geneMap, geneIDtoName map[string]string) {
+func writeGene(
+	file afero.File,
+	sep rune,
+	index int,
+	gene string,
+	details *types.Gene,
+	geneMap,
+	geneIDtoName map[string]string,
+	peptides types.Peptides,
+) {
 	geneNames := make([]string, 0)
 	geneNames = append(geneNames, gene)
 
@@ -56,5 +66,5 @@ func writeGene(file afero.File, sep rune, index int, gene string, details *types
 	subsumedString := strings.Join(details.Subsumed, ", ")
 
 	file.WriteString(fmt.Sprintf("\nHit_%[2]d%[1]s%[3]s%[1]s%[4]s%[1]s%[5]d%[1]s%[6]d%[1]s%[7]s%[1]s\n", string(sep), index, geneNameString, geneIDString, spectralCount, unique, subsumedString))
-	writePeptide(file, sep, details.PeptideCount)
+	writePeptide(file, sep, details.PeptideCount, peptides)
 }

@@ -18,9 +18,9 @@ func TestCopyStringFloatMap(t *testing.T) {
 
 	// TEST2
 	copiedMap["c"] = 3
-	wanted := map[string]float64{
+	expected := map[string]float64{
 		"a": 1,
 		"b": 2,
 	}
-	assert.Equal(t, wanted, originalMap, "Should not modify original map when copy changes")
+	assert.Equal(t, expected, originalMap, "Should not modify original map when copy changes")
 }
