@@ -35,5 +35,5 @@ func TestQuantPeptides(t *testing.T) {
 			},
 		},
 	}
-	assert.Equal(t, expected, QuantifyPeptides(peptides), "Should generate spectral counts for peptides")
+	assert.Equal(t, QuantifyPeptides(peptides), expected, "Should generate spectral counts for peptides")
 }

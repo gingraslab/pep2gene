@@ -5,7 +5,7 @@ import (
 	"github.com/knightjdr/gene-peptide/types"
 )
 
-// QuantifyPeptides sums the spectral counts for peptides in both raw and modified forms
+// QuantifyPeptides sums the spectral counts for peptides in both raw and modified forms.
 func QuantifyPeptides(peptides []types.Peptide) types.Peptides {
 	spectralCounts := make(types.Peptides)
 	for _, peptide := range peptides {

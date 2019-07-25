@@ -10,23 +10,24 @@ import (
 )
 
 // Peptides is an interface for opening a peptide file and passing it to the correct parser
-func Peptides(filename string, pipeline string, fdr, peptideProbabilty float64) []types.Peptide {
+func Peptides(filename string, pipeline string, fdr, peptideProbabilty float64) ([]types.Peptide, map[string]string) {
 	file, err := fs.Instance.Open(filename)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	defer file.Close()
 
+	peptideMap := make(map[string]string, 0)
 	peptides := make([]types.Peptide, 0)
 	if pipeline == "TPP" {
-		peptides = tpp(file, peptideProbabilty)
+		peptides, peptideMap = tpp(file, peptideProbabilty)
 	} else if pipeline == "MSPLIT_DDA" {
-		peptides = msplitDDA(file, fdr)
+		peptides, peptideMap = msplitDDA(file, fdr)
 	} else if pipeline == "MSPLIT_DIA" {
-		peptides = msplitDIA(file)
+		peptides, peptideMap = msplitDIA(file)
 	} else {
 		log.Fatalln(errors.New("Unknown pipeline"))
 	}
 
-	return peptides
+	return peptides, peptideMap
 }

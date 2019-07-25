@@ -28,7 +28,7 @@ func msplitDDARawSequence(peptide string) string {
 	return sequence
 }
 
-func msplitDDA(file afero.File, fdr float64) []types.Peptide {
+func msplitDDA(file afero.File, fdr float64) ([]types.Peptide, map[string]string) {
 	reader := csv.NewReader(file)
 	reader.Comma = '\t'
 	reader.LazyQuotes = true
@@ -39,6 +39,7 @@ func msplitDDA(file afero.File, fdr float64) []types.Peptide {
 		log.Fatalln(err)
 	}
 
+	peptideMap := make(map[string]string, 0)
 	peptides := make([]types.Peptide, 0)
 	for {
 		line, err := reader.Read()
@@ -54,8 +55,9 @@ func msplitDDA(file afero.File, fdr float64) []types.Peptide {
 			modPeptide := msplitDDASequence(line[7])
 			sequence := msplitDDARawSequence(modPeptide)
 			peptides = append(peptides, types.Peptide{Modified: modPeptide, Sequence: sequence})
+			peptideMap[modPeptide] = sequence
 		}
 	}
 
-	return peptides
+	return peptides, peptideMap
 }

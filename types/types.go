@@ -68,10 +68,8 @@ type Parameters struct {
 	Pipeline           string
 }
 
-// Peptide contains the amino acid "Sequence" for a peptide, the "Modified" version of
-// the peptide and whether it is "Decoy"
+// Peptide contains the amino acid "Sequence" for a peptide and the "Modified" version.
 type Peptide struct {
-	Decoy    bool
 	Modified string
 	Sequence string
 }

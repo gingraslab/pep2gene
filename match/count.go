@@ -10,9 +10,8 @@ func assignModPeptides(modified map[string]int, counts map[string]float64, weigh
 	return updatedCounts
 }
 
-// Count spectra and unique peptides for each gene
+// Count spectra and unique peptides for each gene.
 func Count(peptides types.Peptides, genes types.Genes) types.Genes {
-	// Allocate map for modified peptides
 	updatedGenes := make(types.Genes, len(genes))
 	for gene := range genes {
 		updatedGenes[gene] = genes[gene].Copy()

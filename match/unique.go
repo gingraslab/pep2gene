@@ -18,10 +18,10 @@ func Unique(peptides types.Peptides, genes types.Genes) types.Genes {
 		if len(updatedGenes[gene].Shared) > 0 {
 			updatedGenes[gene].UniqueShared = 0
 			sharedGenes := updatedGenes[gene].Shared
+			sharedGeneNum := len(sharedGenes) + 1
+			group := make([]string, sharedGeneNum)
+			group = append(sharedGenes, gene)
 			for _, peptide := range updatedGenes[gene].Peptides {
-				sharedGeneNum := len(sharedGenes) + 1
-				group := make([]string, sharedGeneNum)
-				group = append(sharedGenes, gene)
 				if helpers.SliceEqual(group, peptides[peptide].Genes) {
 					uniquePortion := float64(1) / float64(sharedGeneNum)
 					updatedGenes[gene].Unique += uniquePortion

@@ -9,6 +9,31 @@ import (
 	"github.com/knightjdr/gene-peptide/types"
 )
 
+// addPeptide intializes a gene entry if it doesn't exist add adds
+// a peptide to its matches. If it does exist, it just appends the peptide.
+func addPeptide(geneID string, genes types.Genes, peptide string) {
+	if _, ok := genes[geneID]; ok {
+		genes[geneID].Peptides = append(genes[geneID].Peptides, peptide)
+	} else {
+		genes[geneID] = &types.Gene{
+			Peptides: []string{peptide},
+		}
+	}
+}
+
+// filterPeptides Remove speptides with no matches to a gene and removes
+// duplicate gene matches from each peptide.
+func filterPeptides(peptides types.Peptides, peptide string) {
+	if len(peptides[peptide].Genes) == 0 {
+		delete(peptides, peptide)
+	} else {
+		peptides[peptide].Genes = helpers.SliceUnique(peptides[peptide].Genes)
+		if len(peptides[peptide].Genes) == 1 {
+			peptides[peptide].Unique = true
+		}
+	}
+}
+
 func fullSequence(peptides types.Peptides, db []types.Protein) (types.Peptides, types.Genes) {
 	matchedPeptides := make(types.Peptides, len(peptides))
 
@@ -19,23 +44,10 @@ func fullSequence(peptides types.Peptides, db []types.Protein) (types.Peptides, 
 		for _, entry := range db {
 			if strings.Contains(entry.Sequence, peptide) {
 				matchedPeptides[peptide].Genes = append(matchedPeptides[peptide].Genes, entry.GeneID)
-				if _, ok := genes[entry.GeneID]; ok {
-					genes[entry.GeneID].Peptides = append(genes[entry.GeneID].Peptides, peptide)
-				} else {
-					genes[entry.GeneID] = &types.Gene{
-						Peptides: []string{peptide},
-					}
-				}
+				addPeptide(entry.GeneID, genes, peptide)
 			}
 		}
-		if len(matchedPeptides[peptide].Genes) == 0 {
-			delete(matchedPeptides, peptide)
-		} else {
-			matchedPeptides[peptide].Genes = helpers.SliceUnique(matchedPeptides[peptide].Genes)
-			if len(matchedPeptides[peptide].Genes) == 1 {
-				matchedPeptides[peptide].Unique = true
-			}
-		}
+		filterPeptides(matchedPeptides, peptide)
 	}
 
 	// Remove duplicates peptides in genes.
@@ -60,30 +72,19 @@ func digestedSequence(peptides types.Peptides, db []types.Protein, enzyme string
 		for peptide := range peptides {
 			if _, ok := digested[peptide]; ok {
 				matchedPeptides[peptide].Genes = append(matchedPeptides[peptide].Genes, entry.GeneID)
-				if _, ok := genes[entry.GeneID]; ok {
-					genes[entry.GeneID].Peptides = append(genes[entry.GeneID].Peptides, peptide)
-				} else {
-					genes[entry.GeneID] = &types.Gene{
-						Peptides: []string{peptide},
-					}
-				}
+				addPeptide(entry.GeneID, genes, peptide)
 			}
 		}
+
+		// Remove duplicate peptides.
 		if _, ok := genes[entry.GeneID]; ok {
 			genes[entry.GeneID].Peptides = helpers.SliceUnique(genes[entry.GeneID].Peptides)
 		}
 	}
 
-	// Remove peptides with no matches and remove duplicate gene matches.
+	// Remove peptides with no matches to a gene and remove duplicate gene matches.
 	for peptide := range peptides {
-		if len(matchedPeptides[peptide].Genes) == 0 {
-			delete(matchedPeptides, peptide)
-		} else {
-			matchedPeptides[peptide].Genes = helpers.SliceUnique(matchedPeptides[peptide].Genes)
-			if len(matchedPeptides[peptide].Genes) == 1 {
-				matchedPeptides[peptide].Unique = true
-			}
-		}
+		filterPeptides(matchedPeptides, peptide)
 	}
 	return matchedPeptides, genes
 }

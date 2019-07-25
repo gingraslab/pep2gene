@@ -44,13 +44,19 @@ func TestMsplitDDA(t *testing.T) {
 	)
 
 	file, _ := fs.Instance.Open("test/testfile.txt")
-	peptides := msplitDDA(file, 0.01)
+	actualPeptides, actualPeptideMap := msplitDDA(file, 0.01)
 
-	// TEST
-	expected := []types.Peptide{
-		{Decoy: false, Modified: "ABC", Sequence: "ABC"},
-		{Decoy: false, Modified: "DEF", Sequence: "DEF"},
-		{Decoy: false, Modified: "JK+15.995L", Sequence: "JKL"},
+	// TEST.
+	expectedPeptideMap := map[string]string{
+		"ABC":        "ABC",
+		"DEF":        "DEF",
+		"JK+15.995L": "JKL",
 	}
-	assert.Equal(t, expected, peptides, "Should parse correct peptides from file")
+	expectedPeptides := []types.Peptide{
+		{Modified: "ABC", Sequence: "ABC"},
+		{Modified: "DEF", Sequence: "DEF"},
+		{Modified: "JK+15.995L", Sequence: "JKL"},
+	}
+	assert.Equal(t, expectedPeptides, actualPeptides, "Should parse correct peptides from file")
+	assert.Equal(t, expectedPeptideMap, actualPeptideMap, "Should create a map of modified peptides to raw sequence")
 }

@@ -81,12 +81,11 @@ func parseFlags() (params types.Parameters, err error) {
 
 	// Set tsv as the default output format if selected format is not recognized.
 	availableFormats := map[string]bool{
-		"csv": true,
-		"dsv": true,
-		"tsv": true,
+		"json": true,
+		"txt":  true,
 	}
 	if _, ok := availableFormats[params.OutFormat]; !ok {
-		params.OutFormat = "tsv"
+		params.OutFormat = "json"
 	}
 
 	return

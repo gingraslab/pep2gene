@@ -13,7 +13,9 @@
 
 gene-peptide
 testfiles
-*.dsv
+test-cmd.md
+*.txt
 *.tsv
 *.csv
 *.swp
+*.json
