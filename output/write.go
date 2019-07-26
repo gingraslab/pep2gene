@@ -11,7 +11,7 @@ import (
 
 func outFileName(filePath, format string) string {
 	filename := helpers.Filename(filePath)
-	return fmt.Sprintf("%s.%s", filename, format)
+	return fmt.Sprintf("%s.pep2gene.%s", filename, format)
 }
 
 // Write gene results to a file.

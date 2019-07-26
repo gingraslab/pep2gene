@@ -49,12 +49,12 @@ func parseFlags() (params types.Parameters, err error) {
 	}
 
 	// Set TPP as the default search engine to parse if selected engine is not recognized.
-	availableEngines := map[string]bool{
+	availablePipelines := map[string]bool{
 		"MSPLIT_DDA": true,
 		"MSPLIT_DIA": true,
 		"TPP":        true,
 	}
-	if _, ok := availableEngines[params.Pipeline]; !ok {
+	if _, ok := availablePipelines[params.Pipeline]; !ok {
 		params.Pipeline = "TPP"
 	}
 
