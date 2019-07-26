@@ -2,7 +2,7 @@
 package stats
 
 import (
-	"github.com/knightjdr/gene-peptide/types"
+	"github.com/knightjdr/pep2gene/types"
 )
 
 // QuantifyPeptides sums the spectral counts for peptides in both raw and modified forms.

@@ -3,10 +3,10 @@ package main
 import (
 	"log"
 
-	"github.com/knightjdr/gene-peptide/match"
-	"github.com/knightjdr/gene-peptide/output"
-	"github.com/knightjdr/gene-peptide/read"
-	"github.com/knightjdr/gene-peptide/stats"
+	"github.com/knightjdr/pep2gene/match"
+	"github.com/knightjdr/pep2gene/output"
+	"github.com/knightjdr/pep2gene/read"
+	"github.com/knightjdr/pep2gene/stats"
 )
 
 func main() {

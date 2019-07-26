@@ -1,8 +1,8 @@
-// Package types contains type definitions used throughout gene-peptide
+// Package types contains type definitions used throughout pep2gene
 package types
 
 import (
-	"github.com/knightjdr/gene-peptide/helpers"
+	"github.com/knightjdr/pep2gene/helpers"
 )
 
 // Gene contains based information: 1) is the gene subsumed by another, 2) The

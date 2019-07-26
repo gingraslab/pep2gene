@@ -4,9 +4,9 @@ package match
 import (
 	"strings"
 
-	"github.com/knightjdr/gene-peptide/digestion"
-	"github.com/knightjdr/gene-peptide/helpers"
-	"github.com/knightjdr/gene-peptide/types"
+	"github.com/knightjdr/pep2gene/digestion"
+	"github.com/knightjdr/pep2gene/helpers"
+	"github.com/knightjdr/pep2gene/types"
 )
 
 // addPeptide intializes a gene entry if it doesn't exist add adds

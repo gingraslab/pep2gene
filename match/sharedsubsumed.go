@@ -1,8 +1,8 @@
 package match
 
 import (
-	"github.com/knightjdr/gene-peptide/helpers"
-	"github.com/knightjdr/gene-peptide/types"
+	"github.com/knightjdr/pep2gene/helpers"
+	"github.com/knightjdr/pep2gene/types"
 )
 
 // SharedSubsumed calculates which genes share peptides and which are subsumed by others

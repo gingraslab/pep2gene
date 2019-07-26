@@ -3,7 +3,7 @@ package output
 import (
 	"testing"
 
-	"github.com/knightjdr/gene-peptide/types"
+	"github.com/knightjdr/pep2gene/types"
 	"github.com/stretchr/testify/assert"
 )
 

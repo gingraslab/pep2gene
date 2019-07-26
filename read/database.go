@@ -6,8 +6,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/knightjdr/gene-peptide/fs"
-	"github.com/knightjdr/gene-peptide/types"
+	"github.com/knightjdr/pep2gene/fs"
+	"github.com/knightjdr/pep2gene/types"
 )
 
 func appendDatabase(proteins []types.Protein, currProtein types.Protein, sequence *strings.Builder) []types.Protein {

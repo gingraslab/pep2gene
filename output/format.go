@@ -6,8 +6,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/knightjdr/gene-peptide/helpers"
-	"github.com/knightjdr/gene-peptide/types"
+	"github.com/knightjdr/pep2gene/helpers"
+	"github.com/knightjdr/pep2gene/types"
 )
 
 // Data is a map of genes to their output summary.

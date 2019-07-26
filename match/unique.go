@@ -1,8 +1,8 @@
 package match
 
 import (
-	"github.com/knightjdr/gene-peptide/helpers"
-	"github.com/knightjdr/gene-peptide/types"
+	"github.com/knightjdr/pep2gene/helpers"
+	"github.com/knightjdr/pep2gene/types"
 )
 
 // Unique counts the number of unique peptides per gene. If a gene perfectly shares its

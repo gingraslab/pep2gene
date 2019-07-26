@@ -1,4 +1,4 @@
-module github.com/knightjdr/gene-peptide
+module github.com/knightjdr/pep2gene
 
 go 1.12
 

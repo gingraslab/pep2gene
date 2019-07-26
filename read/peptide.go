@@ -5,8 +5,8 @@ import (
 	"errors"
 	"log"
 
-	"github.com/knightjdr/gene-peptide/fs"
-	"github.com/knightjdr/gene-peptide/types"
+	"github.com/knightjdr/pep2gene/fs"
+	"github.com/knightjdr/pep2gene/types"
 )
 
 // Peptides is an interface for opening a peptide file and passing it to the correct parser
