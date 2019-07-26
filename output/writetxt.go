@@ -37,7 +37,7 @@ func writeTXT(file afero.File, genes map[string]*Gene) {
 			sharedNames = fmt.Sprintf("%s, %s", sharedNames, details.SharedNames)
 		}
 		file.WriteString(
-			fmt.Sprintf("\nHit_%d;;%s;;%s;;%.2f;;%d;;%s;;\n",
+			fmt.Sprintf("\nHit_%d;;%s;;%s;;%.2f;;%d;;%s\n",
 				i+1,
 				sharedNames,
 				sharedIDs,

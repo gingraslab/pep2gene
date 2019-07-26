@@ -14,10 +14,10 @@ import (
 type Data struct {
 	Database           string           `json:"database"`
 	Enzyme             string           `json:"enzyme,omitempty"`
-	MissedCleavages    int              `json:"missedCleavages,omitempty"`
-	FDR                float64          `fdr:"fdr,omitempty"`
+	FDR                float64          `json:"fdr,omitempty"`
 	File               string           `json:"file"`
 	Genes              map[string]*Gene `json:"genes"`
+	MissedCleavages    int              `json:"missedCleavages,omitempty"`
 	PeptideProbability float64          `json:"peptideProbability,omitempty"`
 	Pipeline           string           `json:"pipeline"`
 }
@@ -31,6 +31,7 @@ type Gene struct {
 	SpectralCount float64            `json:"spectralCount"`
 	Subsumed      string             `json:"subsumed"`
 	Unique        int                `json:"unique"`
+	UniqueShared  int                `json:"uniqueShared"`
 }
 
 // Peptide is summary of a gene's peptides for output.
@@ -38,6 +39,7 @@ type Peptide struct {
 	AllottedSpectralCount float64 `json:"allottedSpectralCount"`
 	TotalSpectralCount    int     `json:"totalSpectralCount"`
 	Unique                bool    `json:"unique"`
+	UniqueShared          bool    `json:"uniqueShared"`
 }
 
 func summarizePeptides(
@@ -50,15 +52,17 @@ func summarizePeptides(
 	for peptide, spectralCount := range peptideCount {
 		peptideStats := peptides[peptideMap[peptide]]
 		unique := false
+		uniqueShared := false
 		if len(genes) == 1 {
 			unique = peptideStats.Unique
 		} else if len(genes) > 1 && helpers.SliceEqual(genes, peptideStats.Genes) {
-			unique = true
+			uniqueShared = true
 		}
 		newPeptide := Peptide{
 			AllottedSpectralCount: spectralCount,
 			TotalSpectralCount:    peptideStats.Modified[peptide],
 			Unique:                unique,
+			UniqueShared:          uniqueShared,
 		}
 		summary[peptide] = newPeptide
 	}
@@ -77,10 +81,10 @@ func Format(
 	summary := Data{
 		Database:           filepath.Base(options.Database),
 		Enzyme:             options.Enzyme,
-		MissedCleavages:    options.MissedCleavages,
 		FDR:                options.FDR,
 		File:               filepath.Base(options.File),
 		Genes:              make(map[string]*Gene, 0),
+		MissedCleavages:    options.MissedCleavages,
 		PeptideProbability: options.PeptideProbability,
 		Pipeline:           options.Pipeline,
 	}
@@ -91,6 +95,7 @@ func Format(
 		sharedNames := make([]string, len(details.Shared))
 
 		var unique int
+		var uniqueShared int
 		if len(details.Shared) > 0 {
 			// Get gene names for shared gene IDs, sort and add to gene name list.
 			nameMap := make(map[string]string, 0)
@@ -104,7 +109,7 @@ func Format(
 			for _, sharedName := range sharedNames {
 				sharedIDs = append(sharedIDs, nameMap[sharedName])
 			}
-			unique = details.UniqueShared
+			uniqueShared = details.UniqueShared
 		} else {
 			unique = int(math.Round(details.Unique))
 		}
@@ -121,6 +126,7 @@ func Format(
 			SpectralCount: details.Count,
 			Subsumed:      subsumedString,
 			Unique:        unique,
+			UniqueShared:  uniqueShared,
 		}
 	}
 
