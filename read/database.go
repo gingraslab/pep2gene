@@ -21,8 +21,8 @@ func appendDatabase(proteins []types.Protein, currProtein types.Protein, sequenc
 }
 
 func sequenceNames(line string) map[string]string {
-	fullEntry, _ := regexp.Compile("^>..\\|([\\d\\w_-]+)\\|gn\\|(\\w+):(\\d+)\\| (.+) \\[")
-	geneIDEntry, _ := regexp.Compile("^>..\\|([\\d\\w_-]+)\\|gn\\|(\\w+):(\\d+)")
+	fullEntry, _ := regexp.Compile("^>..\\|([\\d\\w_-]+)\\|gn\\|([\\w-]+):(\\d+)\\| (.+) \\[")
+	geneIDEntry, _ := regexp.Compile("^>..\\|([\\d\\w_-]+)\\|gn\\|([\\w-]+):(\\d+)")
 	ascessionEntry, _ := regexp.Compile("^>..\\|([\\d\\w_-]+)\\|")
 	if fullEntry.MatchString(line) {
 		matches := fullEntry.FindStringSubmatch(line)

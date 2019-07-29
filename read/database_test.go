@@ -19,6 +19,8 @@ AGTRTDSREDEISPPPPNPVVKGRRRRGAI
 LDDNERSDIFDAMFSVSFIAGETVIQQGDE
 >gi|443497952|gn|BBX:56987| HMG box transcription factor BBX isoform 3 [Homo sapiens]
 MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP
+>gi|1111|gn|BBX-1:1111| Gene test 1 [Homo sapiens]
+MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP
 >sp|ALBU_BOVIN|gn|ALB:280717|
 MKWVTFISLLLLFSSAYSRGV
 >sp|CAS1_BOVIN|
@@ -92,6 +94,13 @@ func TestDatabase(t *testing.T) {
 			Sequence: "MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP",
 		},
 		{
+			GeneID:   "1111",
+			GeneName: "BBX-1",
+			GI:       "1111",
+			Name:     "Gene test 1",
+			Sequence: "MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP",
+		},
+		{
 			GeneID:   "280717",
 			GeneName: "ALB",
 			GI:       "ALBU_BOVIN",
@@ -117,6 +126,7 @@ func TestDatabase(t *testing.T) {
 		"11188":      "NISCH",
 		"5573":       "PRKAR1A",
 		"56987":      "BBX",
+		"1111":       "BBX-1",
 		"280717":     "ALB",
 		"CAS1_BOVIN": "CAS1_BOVIN",
 		"Q9BYR8":     "Q9BYR8",
