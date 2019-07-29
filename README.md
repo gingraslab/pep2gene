@@ -51,8 +51,8 @@ The executable will be called `pep2gene`.
 #### Pull image (and rename - optional)
 
 ```
-docker pull knightjdr/pep2gene:v1.1.0
-docker tag knightjdr/pep2gene:v1.1.0 pep2gene
+docker pull knightjdr/pep2gene:v1.2.0
+docker tag knightjdr/pep2gene:v1.2.0 pep2gene
 ```
 
 Check for [versions](https://cloud.docker.com/repository/registry-1.docker.io/knightjdr/pep2gene/tags).
@@ -100,7 +100,7 @@ docker run -v $(pwd):/files/ pep2gene -db="database.fasta" -file="sample.pepxml"
 ### Singularity
 
 ```
-singularity run -B ./:/files/ docker://knightjdr/pep2genesing:v1.1.0 -db="database.fasta" -file="sample.pepxml" -enzyme="trypsin"
+singularity run -B ./:/files/ docker://knightjdr/pep2genesing:v1.2.0 -db="database.fasta" -file="sample.pepxml" -enzyme="trypsin"
 ```
 
 The database and peptide file must be located in the working directory Docker/Singularity is called from. Relative or nested paths will not work, i.e. `./some-directory/database.fasta` or `../database.fasta`. The output file will also be written to the working directory.
