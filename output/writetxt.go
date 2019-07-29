@@ -3,6 +3,7 @@ package output
 import (
 	"fmt"
 	"sort"
+	"strings"
 
 	"github.com/spf13/afero"
 )
@@ -29,12 +30,12 @@ func writeTXT(file afero.File, genes map[string]*Gene) {
 		geneID := nameToID[geneName]
 		details := genes[geneID]
 		sharedIDs := geneID
-		if details.SharedIDs != "" {
-			sharedIDs = fmt.Sprintf("%s, %s", sharedIDs, details.SharedIDs)
+		if len(details.SharedIDs) != 0 {
+			sharedIDs = fmt.Sprintf("%s, %s", sharedIDs, strings.Join(details.SharedIDs, ", "))
 		}
 		sharedNames := details.Name
-		if details.SharedNames != "" {
-			sharedNames = fmt.Sprintf("%s, %s", sharedNames, details.SharedNames)
+		if len(details.SharedNames) != 0 {
+			sharedNames = fmt.Sprintf("%s, %s", sharedNames, strings.Join(details.SharedNames, ", "))
 		}
 		file.WriteString(
 			fmt.Sprintf("\nHit_%d;;%s;;%s;;%.2f;;%d;;%s\n",
@@ -43,7 +44,7 @@ func writeTXT(file afero.File, genes map[string]*Gene) {
 				sharedIDs,
 				details.SpectralCount,
 				details.Unique,
-				details.Subsumed,
+				strings.Join(details.Subsumed, ", "),
 			),
 		)
 

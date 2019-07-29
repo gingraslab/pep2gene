@@ -33,10 +33,10 @@ func TestWriteJSON(t *testing.T) {
 						UniqueShared:          false,
 					},
 				},
-				SharedIDs:     "",
-				SharedNames:   "",
+				SharedIDs:     []string{},
+				SharedNames:   []string{},
 				SpectralCount: 5,
-				Subsumed:      "4",
+				Subsumed:      []string{"4"},
 				Unique:        1,
 				UniqueShared:  0,
 			},
@@ -66,10 +66,12 @@ func TestWriteJSON(t *testing.T) {
 		"\t\t\t\t\t\"uniqueShared\": false\n" +
 		"\t\t\t\t}\n" +
 		"\t\t\t},\n" +
-		"\t\t\t\"sharedIDs\": \"\",\n" +
-		"\t\t\t\"sharedNames\": \"\",\n" +
+		"\t\t\t\"sharedIDs\": [],\n" +
+		"\t\t\t\"sharedNames\": [],\n" +
 		"\t\t\t\"spectralCount\": 5,\n" +
-		"\t\t\t\"subsumed\": \"4\",\n" +
+		"\t\t\t\"subsumed\": [\n" +
+		"\t\t\t\t\"4\"\n" +
+		"\t\t\t],\n" +
 		"\t\t\t\"unique\": 1,\n" +
 		"\t\t\t\"uniqueShared\": 0\n" +
 		"\t\t}\n" +

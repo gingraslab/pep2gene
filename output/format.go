@@ -4,7 +4,6 @@ import (
 	"math"
 	"path/filepath"
 	"sort"
-	"strings"
 
 	"github.com/knightjdr/pep2gene/helpers"
 	"github.com/knightjdr/pep2gene/types"
@@ -26,10 +25,10 @@ type Data struct {
 type Gene struct {
 	Name          string             `json:"name"`
 	Peptides      map[string]Peptide `json:"peptides"`
-	SharedIDs     string             `json:"sharedIDs"`
-	SharedNames   string             `json:"sharedNames"`
+	SharedIDs     []string           `json:"sharedIDs"`
+	SharedNames   []string           `json:"sharedNames"`
 	SpectralCount float64            `json:"spectralCount"`
-	Subsumed      string             `json:"subsumed"`
+	Subsumed      []string           `json:"subsumed"`
 	Unique        int                `json:"unique"`
 	UniqueShared  int                `json:"uniqueShared"`
 }
@@ -116,15 +115,14 @@ func Format(
 
 		peptideDetails := summarizePeptides(append(details.Shared, geneID), details.PeptideCount, peptides, peptideMap)
 		sort.Strings(details.Subsumed)
-		subsumedString := strings.Join(details.Subsumed, ", ")
 
 		summary.Genes[geneID] = &Gene{
 			Name:          geneIDtoName[geneID],
 			Peptides:      peptideDetails,
-			SharedIDs:     strings.Join(sharedIDs, ", "),
-			SharedNames:   strings.Join(sharedNames, ", "),
+			SharedIDs:     sharedIDs,
+			SharedNames:   sharedNames,
 			SpectralCount: details.Count,
-			Subsumed:      subsumedString,
+			Subsumed:      details.Subsumed,
 			Unique:        unique,
 			UniqueShared:  uniqueShared,
 		}

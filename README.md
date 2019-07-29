@@ -76,10 +76,12 @@ docker build -t pep2gene -f docker/standard/Dockerfile .
 For Singularity:
 
 ```
-docker build -t pep2gene -f docker/singularity/Dockerfile .
+docker build -t pep2genesing -f docker/singularity/Dockerfile .
 ```
 
-The Docker image is based from a minimal `scratch` image. While the image is small, it does not work with Singularity, and so Singularity has a slightly different build file.
+We do not provide a Singularity definition file but the Docker image can be used with Singularity provided it is built from the correct source. The Dockerfile found in `docker/standard/` was designed for Docker itself. While the image is small (~7mb), it does not work with Singularity. The Dockerfile found in `docker/singularity/` will build an image compatibly with Singularity although it is about twice the size (13MB).
+
+The images are also hosted at DockerHub in separate repos: [Docker](https://cloud.docker.com/repository/docker/knightjdr/pep2gene) and [Singularity](https://cloud.docker.com/repository/docker/knightjdr/pep2genesing).
 
 ## Usage
 
@@ -98,7 +100,7 @@ docker run -v $(pwd):/files/ pep2gene -db="database.fasta" -file="sample.pepxml"
 ### Singularity
 
 ```
-singularity run -B ./:/files/ docker://knightjdr/pep2gene:v1.1.0 -db="database.fasta" -file="sample.pepxml" -enzyme="trypsin"
+singularity run -B ./:/files/ docker://knightjdr/pep2genesing:v1.1.0 -db="database.fasta" -file="sample.pepxml" -enzyme="trypsin"
 ```
 
 The database and peptide file must be located in the working directory Docker/Singularity is called from. Relative or nested paths will not work, i.e. `./some-directory/database.fasta` or `../database.fasta`. The output file will also be written to the working directory.
@@ -183,3 +185,124 @@ The analysis pipeline used for searching peptides. The options are:
 * TPP
 
 ## Output
+
+### json
+
+The json format will contain fields for user-supplied command line arguments, for example
+the database and file names, and a `genes` object indexed by gene ID for each gene
+identified in the sample.
+
+#### gene fields
+
+| gene field | definition |
+|------------|------------|
+| name | gene name/symbol |
+| peptides | peptides assigned to the gene |
+| sharedIDs | any other genes (by ID) it shares peptides with |
+| sharedNames | any other genes (by name) it shares peptides with |
+| spectralCount | total spectral count for the gene |
+| subsumed | subsumed genes |
+| unique | peptides unique to the gene |
+| uniqueShared | peptides unique to the gene group, if the gene shares peptides |
+
+#### peptide fields
+
+| peptide field | definition |
+|---------------|------------|
+| allottedSpectralCount | the portion of the peptide's spectral count allotted to the gene |
+| totalSpectralCount | the total spectral count for the peptide in the sample |
+| unique | a boolean indicating if the peptide is unique to the gene |
+| uniqueShared | a boolean indicating if the peptide is unique to the group the gene shares peptides with |
+
+```
+{
+  "database": "database.fasta",
+  "enzyme": "trypsin",
+  "file": "sample.pepxml",
+  "genes": {
+    "5825": {
+      "name": "ABCD3",
+      "peptides": {
+        "DQVIYPDGR": {
+          "allottedSpectralCount": 1,
+          "totalSpectralCount": 1,
+          "unique": true,
+          "uniqueShared": false
+        },
+        "FDHVPLATPN[115]GDVLIR": {
+          "allottedSpectralCount": 1,
+          "totalSpectralCount": 1,
+          "unique": true,
+          "uniqueShared": false
+        }
+      },
+      "sharedIDs": [],
+      "sharedNames": [],
+      "spectralCount": 2,
+      "subsumed": [],
+      "unique": 2,
+      "uniqueShared": 0
+    },
+    "60": {
+      "name": "ACTB",
+      "peptides": {
+        "AGFAGDDAPR": {
+          "allottedSpectralCount": 2.5,
+          "totalSpectralCount": 5,
+          "unique": false,
+          "uniqueShared": true
+        },
+        "DLTDYLMK": {
+          "allottedSpectralCount": 2.5,
+          "totalSpectralCount": 5,
+          "unique": false,
+          "uniqueShared": false
+        }
+      },
+      "sharedIDs": ["71"],
+      "sharedNames": ["ACTG1"],
+      "spectralCount": 5,
+      "subsumed": ["100996820", "345651", "445582", "653269", "653781", "728378"],
+      "unique": 0,
+      "uniqueShared": 1
+    }
+  }
+}
+````
+
+### txt
+
+The txt format contains less information than the json format and is not recommended.
+
+The first two lines are headers, followed by gene entries separated by newlines. The first header line
+contains the keys for the summary line of each hit. In the example below the `HitNumber` for the first hit
+is Hit_1, the `Gene` is ABCD3, the `GeneID` is 5825, the `SpectralCount` is 4.00, the number of `Unique`
+peptides is 4 and there are no `Subsumed` genes for the hit. Since spectral counts for peptides can
+be divided between genes, the spectral count is reported as a floating-point number.
+
+The second gene entry is for a shared group, i.e. the members or this group perfectly share a
+set of peptides: in this example ACTB and ACTG1, corresponding to the gene IDs 60 and 71 respectively.
+This group subsumes several other genes indicated by their IDs.
+
+The summary line for each hit is followed by its assigned peptides. Each peptide has a `TotalSpectralCount`
+referring to the total number of spectral counts detected for it in the sample and a yes/no indicator to
+declare its uniqueness to the gene hit.
+
+```
+HitNumber;;Gene;;GeneID;;SpectralCount;;Unique;;Subsumed
+Peptide;;TotalSpectralCount;;IsUnique
+
+Hit_1;;ABCD3;;5825;;4.00;;4;;
+DQVIYPDGR;;1;;yes
+FDHVPLATPN[115]GDVLIR;;1;;yes
+IANPDQLLTQDVEK;;1;;yes
+ITELMQVLK;;1;;yes
+
+Hit_2;;ACTB, ACTG1;;60, 71;;8.56;;0;;100996820, 345651, 445582, 653269, 653781, 728378
+AGFAGDDAPR;;2;;no
+DLTDYLMK;;2;;no
+DLYANTVLSGGTTMYPGIADR;;3;;no
+DLYANTVLSGGTTM[147]YPGIADR;;1;;no
+DSYVGDEAQSK;;2;;no
+EITALAPSTMK;;1;;no
+```
