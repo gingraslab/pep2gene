@@ -2,8 +2,26 @@
 
 Match peptide search results from TPP or MSPLIT to genes.
 
+* [Motivation](#motivation)
+* [Rules](#rules)
 * [Installation](#installation)
 * [Usage](#usage)
+
+## Motivation
+
+Matching peptides to the correct protein and protein isoform can be a challenging task requiring complicated rulesets that can create a confusing picture of the actual sample composition. If the principal interest is actually at the gene level, one way to simplify the interpretation of results is to match peptides to genes, since much of the complexity at the protein level is due to different transcripts arising from a single gene sequence. pep2gene was created to perform this task of matching peptides to genes.
+
+## Rules
+
+Peptides are matched via protein sequence to the corresponding gene identifier. A peptide that matches to multiple proteins that arise from a single gene will count as a single unique peptide match to the gene and any spectral counts for that peptide will be assigned to the gene. If a peptide matches to more than a single gene, whether the peptide gets assigned to the gene, and what portion of its spectral counts get assigned depend on the following rules.
+
+1. If a peptide matches to multiple genes (shared peptide), and there is evidence that each of those genes is present in the sample, i.e. each gene has at least one unique peptide, then the shared peptide will be assigned to all of these matching genes and each gene will get a portion of the shared peptide's spectral counts relative to the evidence for each gene's existence. For example, if one gene has two unique peptides and another has one unique peptide, the first will get twice as many spectral counts from the shared peptide.
+
+2. If a peptide matches to multiple genes but only a subset of those genes have unique peptides, the shared peptide will only be assigned to those genes for which there is definite evidence they are in the sample, i.e. have at least one unique peptide. The spectral counts for the shared peptide will be apportioned as in rule 1.
+
+3. If a gene (A) matches to a peptide or peptides, but those same peptides also match to another gene (B) and that other gene has additional evidence for its existence, gene A is considered to be `subsumed` by B and will be listed as such in the output summary for gene B.
+
+4. If two (or more) genes match to the exact same set of peptides and their is no evidence favouring the presence of one gene over the other, both genes are considered to be present and will evenly split the spectral counts of the shared peptides.
 
 ## Installation
 

@@ -11,6 +11,8 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
+.vscode
+
 pep2gene
 testfiles
 test-cmd.md
