@@ -2,6 +2,7 @@ package read
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"regexp"
 	"strings"
@@ -20,42 +21,32 @@ func appendDatabase(proteins []types.Protein, currProtein types.Protein, sequenc
 	return proteins
 }
 
+func proteinEntry(id string) string {
+	return fmt.Sprintf("p-%s", id)
+}
+
 func sequenceNames(line string) map[string]string {
-	fullEntry, _ := regexp.Compile("^>..\\|([\\d\\w_-]+)\\|gn\\|([\\w-]+):(\\d+)\\| (.+) \\[")
-	geneIDEntry, _ := regexp.Compile("^>..\\|([\\d\\w_-]+)\\|gn\\|([\\w-]+):(\\d+)")
+	geneIDEntry, _ := regexp.Compile("^>..\\|[\\d\\w_-]+\\|gn\\|([\\w-]+):(\\d+)")
 	ascessionEntry, _ := regexp.Compile("^>..\\|([\\d\\w_-]+)\\|")
-	if fullEntry.MatchString(line) {
-		matches := fullEntry.FindStringSubmatch(line)
-		return map[string]string{
-			"geneid":   matches[3],
-			"genename": matches[2],
-			"gi":       matches[1],
-			"name":     matches[4],
-		}
-	} else if geneIDEntry.MatchString(line) {
+	if geneIDEntry.MatchString(line) {
 		matches := geneIDEntry.FindStringSubmatch(line)
 		return map[string]string{
-			"geneid":   matches[3],
-			"genename": matches[2],
-			"gi":       matches[1],
-			"name":     matches[2],
+			"geneid":   matches[2],
+			"genename": matches[1],
 		}
 	} else if ascessionEntry.MatchString(line) {
 		matches := ascessionEntry.FindStringSubmatch(line)
+		id := proteinEntry(matches[1])
 		return map[string]string{
-			"geneid":   matches[1],
-			"genename": matches[1],
-			"gi":       matches[1],
-			"name":     matches[1],
+			"geneid":   id,
+			"genename": id,
 		}
 	}
 	id := strings.Split(line, " ")[0]
-	id = id[1:]
+	id = proteinEntry(id[1:])
 	return map[string]string{
 		"geneid":   id,
 		"genename": id,
-		"gi":       id,
-		"name":     id,
 	}
 }
 
@@ -79,8 +70,6 @@ func Database(filename string) ([]types.Protein, map[string]string) {
 			names := sequenceNames(line)
 			currProtein.GeneID = names["geneid"]
 			currProtein.GeneName = names["genename"]
-			currProtein.GI = names["gi"]
-			currProtein.Name = names["name"]
 			currProtein.Sequence = ""
 			geneMap[names["geneid"]] = names["genename"]
 		} else {

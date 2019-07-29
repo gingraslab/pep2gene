@@ -35,8 +35,6 @@ func TestAppendDatabase(t *testing.T) {
 	currProtein := types.Protein{
 		GeneID:   "123",
 		GeneName: "abc",
-		GI:       "456",
-		Name:     "ABC",
 		Sequence: "",
 	}
 	proteins := make([]types.Protein, 0)
@@ -50,7 +48,7 @@ func TestAppendDatabase(t *testing.T) {
 	sequence.WriteString("XYZ")
 	result = appendDatabase(proteins, currProtein, &sequence)
 	expected := []types.Protein{
-		{GeneID: "123", GeneName: "abc", GI: "456", Name: "ABC", Sequence: "XYZ"},
+		{GeneID: "123", GeneName: "abc", Sequence: "XYZ"},
 	}
 	assert.Equal(t, expected, result, "Should return updated protein database")
 	assert.Equal(t, "", sequence.String(), "Should clear string builder")
@@ -75,61 +73,47 @@ func TestDatabase(t *testing.T) {
 		{
 			GeneID:   "11188",
 			GeneName: "NISCH",
-			GI:       "443497968",
-			Name:     "nischarin isoform 2",
 			Sequence: "MATARTFGPEREAEPAKEARVVGSELVDTYLPPKKIIGKNSRSLVEKREKDLEVYLQKLL",
 		},
 		{
 			GeneID:   "5573",
 			GeneName: "PRKAR1A",
-			GI:       "443497964",
-			Name:     "cAMP-dependent protein kinase type I-alpha regulatory subunit isoform a",
 			Sequence: "MESGSTAASEEARSLRECELYVQKHNIQALAGTRTDSREDEISPPPPNPVVKGRRRRGAILDDNERSDIFDAMFSVSFIAGETVIQQGDE",
 		},
 		{
 			GeneID:   "56987",
 			GeneName: "BBX",
-			GI:       "443497952",
-			Name:     "HMG box transcription factor BBX isoform 3",
 			Sequence: "MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP",
 		},
 		{
 			GeneID:   "1111",
 			GeneName: "BBX-1",
-			GI:       "1111",
-			Name:     "Gene test 1",
 			Sequence: "MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP",
 		},
 		{
 			GeneID:   "280717",
 			GeneName: "ALB",
-			GI:       "ALBU_BOVIN",
-			Name:     "ALB",
 			Sequence: "MKWVTFISLLLLFSSAYSRGV",
 		},
 		{
-			GeneID:   "CAS1_BOVIN",
-			GeneName: "CAS1_BOVIN",
-			GI:       "CAS1_BOVIN",
-			Name:     "CAS1_BOVIN",
+			GeneID:   "p-CAS1_BOVIN",
+			GeneName: "p-CAS1_BOVIN",
 			Sequence: "MKLLILTCLVAVALARPKHPIKHQGLPQEVLNENLLRFFVAPFPEVFGKE",
 		},
 		{
-			GeneID:   "Q9BYR8",
-			GeneName: "Q9BYR8",
-			GI:       "Q9BYR8",
-			Name:     "Q9BYR8",
+			GeneID:   "p-Q9BYR8",
+			GeneName: "p-Q9BYR8",
 			Sequence: "MYCCALRSCSVPTGPATTFCSFDKSCRCGVCLPSTCPHEISLLQPICCDTCPPPCCKPDT",
 		},
 	}
 	expectedGeneMap := map[string]string{
-		"11188":      "NISCH",
-		"5573":       "PRKAR1A",
-		"56987":      "BBX",
-		"1111":       "BBX-1",
-		"280717":     "ALB",
-		"CAS1_BOVIN": "CAS1_BOVIN",
-		"Q9BYR8":     "Q9BYR8",
+		"11188":        "NISCH",
+		"5573":         "PRKAR1A",
+		"56987":        "BBX",
+		"1111":         "BBX-1",
+		"280717":       "ALB",
+		"p-CAS1_BOVIN": "p-CAS1_BOVIN",
+		"p-Q9BYR8":     "p-Q9BYR8",
 	}
 	resultDB, resultGeneMap := Database("test/testfile.txt")
 	assert.Equal(t, expectedDB, resultDB, "Should parse proteins from database")

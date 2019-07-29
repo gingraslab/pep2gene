@@ -105,9 +105,7 @@ func (p PeptideStat) Copy() *PeptideStat {
 type Protein struct {
 	GeneID          string
 	GeneName        string
-	GI              string
 	MatchedPeptides []string
-	Name            string
 	Sequence        string
 }
 
