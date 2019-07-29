@@ -47,25 +47,42 @@ cd pep2gene
 ```
 
 2. Build the image
+
+For Docker:
+
 ```
-docker build -t pep2gene .
+docker build -t pep2gene -f docker/standard/Dockerfile .
 ```
+
+For Singularity:
+
+```
+docker build -t pep2gene -f docker/singularity/Dockerfile .
+```
+
+The Docker image is based from a minimal `scratch` image. While the image is small, it does not work with Singularity, and so Singularity has a slightly different build file.
 
 ## Usage
 
 ### GO executable
 
 ```
-pep2gene -db="database.fasta" -file="sample.pepxml" -enzyme="trypsin" -missedcleavages="2"
+pep2gene -db="database.fasta" -file="sample.pepxml" -enzyme="trypsin"
 ```
 
 ### Docker
 
 ```
-docker run -rm -v $(pwd):/files/ pep2gene -db="database.fasta" -file="sample.pepxml" -enzyme="trypsin" -missedcleavages="2"
+docker run -v $(pwd):/files/ pep2gene -db="database.fasta" -file="sample.pepxml" -enzyme="trypsin"
 ```
 
-The database and peptide file must be located in the working directory Docker is called from. Relative or nested paths will not work, i.e. `./some-directory/database.fasta` or `../database.fasta`. The output file will also be written to the working directory.
+### Singularity
+
+```
+singularity run -B ./:/files/ docker://knightjdr/pep2gene:v1.0.0 -db="database.fasta" -file="sample.pepxml" -enzyme="trypsin"
+```
+
+The database and peptide file must be located in the working directory Docker/Singularity is called from. Relative or nested paths will not work, i.e. `./some-directory/database.fasta` or `../database.fasta`. The output file will also be written to the working directory.
 
 ### Flags
 
@@ -84,12 +101,14 @@ The database and peptide file must be located in the working directory Docker is
 
 **_-db (database)_**
 
-The search database is expected to be in FASTA format, with headers of the format
-> \>xx|accession|gn|\<gene name>:\<Entrez gene id>
+The search database is expected to be in FASTA format, with headers following this convention:
+> \>xx|accession|gn|\<gene symbol>:\<Entrez gene ID>
 
 E.G:
 
 > \>gi|22538794|gn|PDCD10:11235| programmed cell death protein 10 [Homo sapiens]
+
+While pep2gene does try to parse the accession and gene name, currently only the gene symbol and gene ID are used.
 
 **_-enzyme_**
 
