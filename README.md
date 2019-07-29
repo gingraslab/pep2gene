@@ -6,6 +6,7 @@ Match peptide search results from TPP or MSPLIT to genes.
 * [Rules](#rules)
 * [Installation](#installation)
 * [Usage](#usage)
+* [Output](#output)
 
 ## Motivation
 
@@ -50,8 +51,8 @@ The executable will be called `pep2gene`.
 #### Pull image (and rename - optional)
 
 ```
-docker pull knightjdr/pep2gene:v1.0.0
-docker tag knightjdr/pep2gene:v1.0.0 pep2gene
+docker pull knightjdr/pep2gene:v1.1.0
+docker tag knightjdr/pep2gene:v1.1.0 pep2gene
 ```
 
 Check for [versions](https://cloud.docker.com/repository/registry-1.docker.io/knightjdr/pep2gene/tags).
@@ -97,7 +98,7 @@ docker run -v $(pwd):/files/ pep2gene -db="database.fasta" -file="sample.pepxml"
 ### Singularity
 
 ```
-singularity run -B ./:/files/ docker://knightjdr/pep2gene:v1.0.0 -db="database.fasta" -file="sample.pepxml" -enzyme="trypsin"
+singularity run -B ./:/files/ docker://knightjdr/pep2gene:v1.1.0 -db="database.fasta" -file="sample.pepxml" -enzyme="trypsin"
 ```
 
 The database and peptide file must be located in the working directory Docker/Singularity is called from. Relative or nested paths will not work, i.e. `./some-directory/database.fasta` or `../database.fasta`. The output file will also be written to the working directory.
@@ -110,6 +111,7 @@ The database and peptide file must be located in the working directory Docker/Si
 | -enzyme | digestion enzyme | false | |
 | -fdr | MSPLIT peptide FDR | false | 0.01 |
 | -file | peptide file | true | |
+| -inferenzyzme | infer the digestive enzyme | false | false |
 | -missedcleavages | number of missed cleavages | false | 0 |
 | -output | output file format | false | json |
 | -pepprob | TPP peptide probability | false | 0.85 |
@@ -152,6 +154,23 @@ The available enzymes are:
 
 The FDR is used for parsing high-quality peptides from MSPLIT results, both DDA and DIA. It is ignored when parsing TPP results.
 
+**_-file_**
+
+pepXML files from TPP are supported, as are DDA and DIA output files from MSPLIT.
+
+**_-inferenzyme_**
+
+pep2gene can infer the enzyme used to digest the sample, rather that requiring it to be input as an argument. However, currently
+the enzyme name can only be parsed from pepXML files that contain the `sample_enzyme` field:
+
+> <sample_enzyme name="trypsin">
+
+The name of the enzyme must match one of the names listed above. 
+
+**_-output_**
+
+Results can be output in either json (default) or txt format. The txt format is a legacy format that we do not recommend using. See the [Output](#output) section for a detailed description of each format.
+
 **_-pepprob_**
 
 The peptide probability for parsing high-quality peptides from TPP results. It is ignored when parsing MSPLIT results.
@@ -162,3 +181,5 @@ The analysis pipeline used for searching peptides. The options are:
 * MSPLIT_DDA
 * MSPLIT_DIA
 * TPP
+
+## Output

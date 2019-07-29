@@ -21,6 +21,7 @@ func TestParseFlags(t *testing.T) {
 		"-enzyme", "Trypsin",
 		"-fdr", "0.05",
 		"-file", "peptide.txt",
+		"-inferenzyme",
 		"-missedcleavages", "2",
 		"-output", "json",
 		"-pepprob", "0.9",
@@ -31,6 +32,7 @@ func TestParseFlags(t *testing.T) {
 		Enzyme:             "trypsin",
 		FDR:                0.05,
 		File:               "peptide.txt",
+		InferEnzyme:        true,
 		MissedCleavages:    2,
 		OutFormat:          "json",
 		PeptideProbability: 0.9,
@@ -43,13 +45,12 @@ func TestParseFlags(t *testing.T) {
 	// TEST2: returns default parameters when missing.
 	os.Args = []string{
 		"cmd",
-		"-enzyme", "Unknown",
 	}
 	wantArgs = types.Parameters{
 		Database:           "",
-		Enzyme:             "",
 		FDR:                0.01,
 		File:               "",
+		InferEnzyme:        false,
 		MissedCleavages:    0,
 		OutFormat:          "json",
 		PeptideProbability: 0.85,
@@ -65,7 +66,7 @@ func TestParseFlags(t *testing.T) {
 	os.Args = []string{
 		"cmd",
 		"-db", "database.fasta",
-		"-enzyme", "Unknown",
+		"-enzyme", "trypsin",
 		"-fdr", "0.05",
 		"-file", "peptide.txt",
 		"-missedcleavages", "2",
@@ -74,7 +75,6 @@ func TestParseFlags(t *testing.T) {
 		"-pipeline", "Unknown",
 	}
 	args, _ = parseFlags()
-	assert.Equal(t, "", args.Enzyme, "Should clear enzyme when arg not recognized")
 	assert.Equal(t, "json", args.OutFormat, "Should set output format to tsv when arg not recognized")
 	assert.Equal(t, "TPP", args.Pipeline, "Should set pipeline to TPP when arg not recognized")
 }

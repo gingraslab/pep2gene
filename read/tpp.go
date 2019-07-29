@@ -10,11 +10,13 @@ import (
 	"github.com/spf13/afero"
 )
 
-func tpp(file afero.File, peptideProbabilty float64) ([]types.Peptide, map[string]string) {
+func tpp(file afero.File, peptideProbabilty float64, inferEnzyme bool) ([]types.Peptide, map[string]string, string) {
+	enzymeRegex, _ := regexp.Compile("^<sample_enzyme name=\"([\\w-/]+)\"")
 	modifiedRegex, _ := regexp.Compile("^<modification_info modified_peptide=\"([^\"]+)\"")
 	peptideRegex, _ := regexp.Compile("^<search_hit hit_rank=\"\\d+\" peptide=\"([^\"]+)\"")
 	propabilityRegex, _ := regexp.Compile("^<peptideprophet_result probability=\"([0-9\\.]+)")
 
+	enzyme := ""
 	peptideMap := make(map[string]string, 0)
 	peptides := make([]types.Peptide, 0)
 	var currPeptide types.Peptide
@@ -37,6 +39,9 @@ func tpp(file afero.File, peptideProbabilty float64) ([]types.Peptide, map[strin
 				peptides = append(peptides, currPeptide)
 				peptideMap[currPeptide.Modified] = currPeptide.Sequence
 			}
+		} else if inferEnzyme && enzymeRegex.MatchString(line) {
+			enzymeMatches := enzymeRegex.FindStringSubmatch(line)
+			enzyme = enzymeMatches[1]
 		}
 	}
 
@@ -44,5 +49,5 @@ func tpp(file afero.File, peptideProbabilty float64) ([]types.Peptide, map[strin
 		log.Fatalln(err)
 	}
 
-	return peptides, peptideMap
+	return peptides, peptideMap, enzyme
 }

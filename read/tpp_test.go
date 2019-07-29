@@ -9,7 +9,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var tppText = `<search_hit hit_rank="1" peptide="ABC">
+var tppText = `<sample_enzyme name="trypsin">
+<search_hit hit_rank="1" peptide="ABC">
 <peptideprophet_result probability="0.95">
 </peptideprophet_result>
 </search_hit>
@@ -43,10 +44,10 @@ func TestTPP(t *testing.T) {
 		0444,
 	)
 
+	
+	// TEST1: infer enzyme.
 	file, _ := fs.Instance.Open("test/testfile.txt")
-	actualPeptides, actualPeptideMap := tpp(file, 0.85)
-
-	// TEST.
+	actualPeptides, actualPeptideMap, actualEnzyme := tpp(file, 0.85, true)
 	expectedPeptideMap := map[string]string{
 		"ABC":      "ABC",
 		"GHI":      "GHI",
@@ -59,4 +60,10 @@ func TestTPP(t *testing.T) {
 	}
 	assert.Equal(t, expectedPeptides, actualPeptides, "Should parse correct peptides from file")
 	assert.Equal(t, expectedPeptideMap, actualPeptideMap, "Should create a map of modified peptides to raw sequence")
+	assert.Equal(t, "trypsin", actualEnzyme, "Should infer enzyme")
+
+	// TEST2: do not infer enzyme.
+	file, _ = fs.Instance.Open("test/testfile.txt")
+	_, _, actualEnzyme = tpp(file, 0.85, false)
+	assert.Equal(t, "", actualEnzyme, "Should not infer enzyme")
 }

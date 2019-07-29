@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/knightjdr/pep2gene/digestion"
 	"github.com/knightjdr/pep2gene/match"
 	"github.com/knightjdr/pep2gene/output"
 	"github.com/knightjdr/pep2gene/read"
@@ -16,7 +17,7 @@ func main() {
 	}
 
 	// Read peptides from file.
-	peptideList, peptideMap := read.Peptides(args.File, args.Pipeline, args.FDR, args.PeptideProbability)
+	peptideList, peptideMap, inferredEnzyme := read.Peptides(args.File, args.Pipeline, args.FDR, args.PeptideProbability, args.InferEnzyme)
 
 	// Count spectra.
 	peptideSummary := stats.QuantifyPeptides(peptideList)
@@ -24,8 +25,11 @@ func main() {
 	// Read database.
 	db, geneIDtoName := read.Database(args.Database)
 
+	// Set enzyme
+	enzyme := digestion.SetEnzyme(inferredEnzyme, args.Enzyme)
+
 	// Match genes to peptides and peptides to genes.
-	matchedPeptides, matchedGenes := match.Peptides(peptideSummary, db, args.Enzyme, args.MissedCleavages)
+	matchedPeptides, matchedGenes := match.Peptides(peptideSummary, db, enzyme, args.MissedCleavages)
 
 	// Find shared and subsumed genes.
 	genes := match.SharedSubsumed(matchedGenes)

@@ -61,6 +61,7 @@ type Parameters struct {
 	Enzyme             string
 	FDR                float64
 	File               string
+	InferEnzyme        bool
 	MapFile            string
 	MissedCleavages    int
 	OutFormat          string

@@ -16,6 +16,7 @@ func parseFlags() (params types.Parameters, err error) {
 	enzyme := args.String("enzyme", "", "Cleavage enzyme")
 	fdr := args.Float64("fdr", 0.01, "FDR cutoff")
 	file := args.String("file", "", "File to process")
+	inferEnzyme := args.Bool("inferenzyme", false, "Infer digestive enzyme")
 	missedCleavages := args.Int("missedcleavages", 0, "Max number of missed cleavages")
 	outFormat := args.String("output", "tsv", "Output file format")
 	pepprob := args.Float64("pepprob", 0.85, "TPP peptide probability cutoff")
@@ -27,6 +28,7 @@ func parseFlags() (params types.Parameters, err error) {
 		Enzyme:             strings.ToLower(*enzyme),
 		FDR:                *fdr,
 		File:               *file,
+		InferEnzyme:        *inferEnzyme,
 		MissedCleavages:    *missedCleavages,
 		OutFormat:          *outFormat,
 		PeptideProbability: *pepprob,
@@ -56,27 +58,6 @@ func parseFlags() (params types.Parameters, err error) {
 	}
 	if _, ok := availablePipelines[params.Pipeline]; !ok {
 		params.Pipeline = "TPP"
-	}
-
-	// Clear enzyme if requested enzyme is not recognized
-	availableEnzymes := map[string]bool{
-		"arg-c":        true,
-		"asp-n":        true,
-		"asp-n_ambic":  true,
-		"chymotrypsin": true,
-		"cnbr":         true,
-		"lys-c":        true,
-		"lys-c/p":      true,
-		"lys-n":        true,
-		"pepsina":      true,
-		"trypchymo":    true,
-		"trypsin":      true,
-		"trypsin/p":    true,
-		"v8-de":        true,
-		"v8-e":         true,
-	}
-	if _, ok := availableEnzymes[params.Enzyme]; params.Enzyme != "" && !ok {
-		params.Enzyme = ""
 	}
 
 	// Set tsv as the default output format if selected format is not recognized.
