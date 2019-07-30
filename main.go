@@ -23,7 +23,7 @@ func main() {
 	peptideSummary := stats.QuantifyPeptides(peptideList)
 
 	// Read database.
-	db, geneIDtoName := read.Database(args.Database)
+	db, geneIDtoName := read.Database(args.Database, args.IgnoreInvalid)
 
 	// Set enzyme
 	enzyme := digestion.SetEnzyme(inferredEnzyme, args.Enzyme)

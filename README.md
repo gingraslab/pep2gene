@@ -113,6 +113,7 @@ The database and peptide file must be located in the working directory Docker/Si
 | -enzyme | digestion enzyme | false | |
 | -fdr | MSPLIT peptide FDR | false | 0.01 |
 | -file | peptide file | true | |
+| -ignoreinvalid | ignore sequences with an invalid header | false | true |
 | -inferenzyzme | infer the digestive enzyme | false | false |
 | -missedcleavages | number of missed cleavages | false | 0 |
 | -output | output file format | false | json |
@@ -124,7 +125,7 @@ The database and peptide file must be located in the working directory Docker/Si
 **_-db (database)_**
 
 The search database is expected to be in FASTA format, with headers following this convention:
-> \>xx|accession|gn|\<gene symbol>:\<Entrez gene ID>
+> \>xx|xxxxxxxxx|gn|\<gene symbol>:\<Entrez gene ID>
 
 E.G:
 
@@ -167,7 +168,18 @@ the enzyme name can only be parsed from pepXML files that contain the `sample_en
 
 > <sample_enzyme name="trypsin">
 
-The name of the enzyme must match one of the names listed above. 
+The name of the enzyme must match one of the names listed above.
+
+**_-ignoreinvalid_**
+
+Sequences that do not conform to the required header format
+
+> \>xx|xxxxxxxxx|gn|\<gene symbol>:\<Entrez gene ID>
+
+will be ignored by default since pep2gene will not know how to parse the gene symbol and gene ID, both of which are required.
+This can be overridden by setting this argument to `false`. When this argument is set to false, any sequences for which a symbol
+and ID can not be determined will be identified by any leading non-whitespace characters in the header, and will be prefixed with
+`p-` to indicate they do not conform.  
 
 **_-output_**
 

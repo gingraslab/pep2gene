@@ -62,6 +62,7 @@ type Parameters struct {
 	FDR                float64
 	File               string
 	InferEnzyme        bool
+	IgnoreInvalid      bool
 	MapFile            string
 	MissedCleavages    int
 	OutFormat          string
@@ -107,6 +108,7 @@ type Protein struct {
 	GeneName        string
 	MatchedPeptides []string
 	Sequence        string
+	Valid           bool
 }
 
 // Peptides is a map of peptides to their spectral counts and modified forms

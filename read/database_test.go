@@ -32,26 +32,73 @@ MYCCALRSCSVPTGPATTFCSFDKSCRCGVCLPSTCPHEISLLQPICCDTCPPPCCKPDT
 `
 
 func TestAppendDatabase(t *testing.T) {
+	var sequence strings.Builder
+
+	// TEST1: an empty sequence.
 	currProtein := types.Protein{
 		GeneID:   "123",
 		GeneName: "abc",
 		Sequence: "",
+		Valid: true,
 	}
-	proteins := make([]types.Protein, 0)
-	var sequence strings.Builder
+	database := make([]types.Protein, 0)
+	geneMap := make(map[string]string, 0)
+	actualDatabase, _ := appendDatabase(database, currProtein, &sequence, geneMap, false)
+	expectedDatabase := []types.Protein{}
+	assert.Equal(t, expectedDatabase, actualDatabase, "Should return input protein database")
 
-	// TEST1: an empty string build
-	result := appendDatabase(proteins, currProtein, &sequence)
-	assert.Equal(t, proteins, result, "Should return input protein database")
-
-	// TEST1: an empty string build
+	// TEST2: an non-empty sequence
+	currProtein = types.Protein{
+		GeneID:   "123",
+		GeneName: "abc",
+		Sequence: "",
+		Valid: true,
+	}
+	database = make([]types.Protein, 0)
+	geneMap = make(map[string]string, 0)
 	sequence.WriteString("XYZ")
-	result = appendDatabase(proteins, currProtein, &sequence)
-	expected := []types.Protein{
-		{GeneID: "123", GeneName: "abc", Sequence: "XYZ"},
+	actualDatabase, _ = appendDatabase(database, currProtein, &sequence, geneMap, false)
+	expectedDatabase = []types.Protein{
+		{GeneID: "123", GeneName: "abc", Sequence: "XYZ", Valid: true},
 	}
-	assert.Equal(t, expected, result, "Should return updated protein database")
+	assert.Equal(t, expectedDatabase, actualDatabase, "Should update protein database with sequence")
 	assert.Equal(t, "", sequence.String(), "Should clear string builder")
+
+	// TEST3: an invalid sequence
+	currProtein = types.Protein{
+		GeneID:   "123",
+		GeneName: "123",
+		Sequence: "",
+		Valid: false,
+	}
+	database = make([]types.Protein, 0)
+	geneMap = make(map[string]string, 0)
+	sequence.WriteString("XYZ")
+	actualDatabase, _  = appendDatabase(database, currProtein, &sequence, geneMap, true)
+	expectedDatabase = []types.Protein{}
+	assert.Equal(t, expectedDatabase, actualDatabase, "Should not add sequence to protein database")
+}
+
+func TestSequenceNames(t *testing.T) {
+	// TEST1: read valid sequence.
+	line := ">gi|443497968|gn|NISCH:11188| nischarin isoform 2"
+	actualDescription, actualValid := sequenceNames(line)
+	expectedDescription := map[string]string{
+		"geneid":   "11188",
+		"genename": "NISCH",
+	}
+	assert.Equal(t, expectedDescription, actualDescription, "Should read valid sequence header")
+	assert.True(t, actualValid, "Should report valid sequence header")
+
+	// TEST2: read invalid sequence.
+	line = ">sp|CAS1_BOVIN|"
+	actualDescription, actualValid = sequenceNames(line)
+	expectedDescription = map[string]string{
+		"geneid":   "p-sp|CAS1_BOVIN|",
+		"genename": "p-sp|CAS1_BOVIN|",
+	}
+	assert.Equal(t, expectedDescription, actualDescription, "Should read invalid sequence header")
+	assert.False(t, actualValid, "Should report invalid sequence header")
 }
 
 func TestDatabase(t *testing.T) {
@@ -69,53 +116,105 @@ func TestDatabase(t *testing.T) {
 		0444,
 	)
 
+	// TEST1: read invalid sequences.
 	expectedDB := []types.Protein{
 		{
 			GeneID:   "11188",
 			GeneName: "NISCH",
 			Sequence: "MATARTFGPEREAEPAKEARVVGSELVDTYLPPKKIIGKNSRSLVEKREKDLEVYLQKLL",
+			Valid: true,
 		},
 		{
 			GeneID:   "5573",
 			GeneName: "PRKAR1A",
 			Sequence: "MESGSTAASEEARSLRECELYVQKHNIQALAGTRTDSREDEISPPPPNPVVKGRRRRGAILDDNERSDIFDAMFSVSFIAGETVIQQGDE",
+			Valid: true,
 		},
 		{
 			GeneID:   "56987",
 			GeneName: "BBX",
 			Sequence: "MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP",
+			Valid: true,
 		},
 		{
 			GeneID:   "1111",
 			GeneName: "BBX-1",
 			Sequence: "MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP",
+			Valid: true,
 		},
 		{
 			GeneID:   "280717",
 			GeneName: "ALB",
 			Sequence: "MKWVTFISLLLLFSSAYSRGV",
+			Valid: true,
 		},
 		{
-			GeneID:   "p-CAS1_BOVIN",
-			GeneName: "p-CAS1_BOVIN",
+			GeneID:   "p-sp|CAS1_BOVIN|",
+			GeneName: "p-sp|CAS1_BOVIN|",
 			Sequence: "MKLLILTCLVAVALARPKHPIKHQGLPQEVLNENLLRFFVAPFPEVFGKE",
+			Valid: false,
 		},
 		{
 			GeneID:   "p-Q9BYR8",
 			GeneName: "p-Q9BYR8",
 			Sequence: "MYCCALRSCSVPTGPATTFCSFDKSCRCGVCLPSTCPHEISLLQPICCDTCPPPCCKPDT",
+			Valid: false,
 		},
 	}
 	expectedGeneMap := map[string]string{
-		"11188":        "NISCH",
-		"5573":         "PRKAR1A",
-		"56987":        "BBX",
-		"1111":         "BBX-1",
-		"280717":       "ALB",
-		"p-CAS1_BOVIN": "p-CAS1_BOVIN",
-		"p-Q9BYR8":     "p-Q9BYR8",
+		"11188":            "NISCH",
+		"5573":             "PRKAR1A",
+		"56987":            "BBX",
+		"1111":             "BBX-1",
+		"280717":           "ALB",
+		"p-sp|CAS1_BOVIN|": "p-sp|CAS1_BOVIN|",
+		"p-Q9BYR8":         "p-Q9BYR8",
 	}
-	resultDB, resultGeneMap := Database("test/testfile.txt")
-	assert.Equal(t, expectedDB, resultDB, "Should parse proteins from database")
-	assert.Equal(t, expectedGeneMap, resultGeneMap, "Should generate gene ID to name map")
+	actualDB, actualGeneMap := Database("test/testfile.txt", false)
+	assert.Equal(t, expectedDB, actualDB, "Should parse all proteins from database")
+	assert.Equal(t, expectedGeneMap, actualGeneMap, "Should generate gene ID to name map")
+
+	// TEST2: read valid sequences.
+	expectedDB = []types.Protein{
+		{
+			GeneID:   "11188",
+			GeneName: "NISCH",
+			Sequence: "MATARTFGPEREAEPAKEARVVGSELVDTYLPPKKIIGKNSRSLVEKREKDLEVYLQKLL",
+			Valid: true,
+		},
+		{
+			GeneID:   "5573",
+			GeneName: "PRKAR1A",
+			Sequence: "MESGSTAASEEARSLRECELYVQKHNIQALAGTRTDSREDEISPPPPNPVVKGRRRRGAILDDNERSDIFDAMFSVSFIAGETVIQQGDE",
+			Valid: true,
+		},
+		{
+			GeneID:   "56987",
+			GeneName: "BBX",
+			Sequence: "MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP",
+			Valid: true,
+		},
+		{
+			GeneID:   "1111",
+			GeneName: "BBX-1",
+			Sequence: "MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP",
+			Valid: true,
+		},
+		{
+			GeneID:   "280717",
+			GeneName: "ALB",
+			Sequence: "MKWVTFISLLLLFSSAYSRGV",
+			Valid: true,
+		},
+	}
+	expectedGeneMap = map[string]string{
+		"11188":            "NISCH",
+		"5573":             "PRKAR1A",
+		"56987":            "BBX",
+		"1111":             "BBX-1",
+		"280717":           "ALB",
+	}
+	actualDB, actualGeneMap = Database("test/testfile.txt", true)
+	assert.Equal(t, expectedDB, actualDB, "Should parse valid proteins from database")
+	assert.Equal(t, expectedGeneMap, actualGeneMap, "Should generate gene ID to name map")
 }

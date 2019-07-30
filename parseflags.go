@@ -17,6 +17,7 @@ func parseFlags() (params types.Parameters, err error) {
 	fdr := args.Float64("fdr", 0.01, "FDR cutoff")
 	file := args.String("file", "", "File to process")
 	inferEnzyme := args.Bool("inferenzyme", false, "Infer digestive enzyme")
+	ignoreInvalid := args.Bool("ignoreinvalid", true, "Ignore invalid sequences")
 	missedCleavages := args.Int("missedcleavages", 0, "Max number of missed cleavages")
 	outFormat := args.String("output", "tsv", "Output file format")
 	pepprob := args.Float64("pepprob", 0.85, "TPP peptide probability cutoff")
@@ -29,6 +30,7 @@ func parseFlags() (params types.Parameters, err error) {
 		FDR:                *fdr,
 		File:               *file,
 		InferEnzyme:        *inferEnzyme,
+		IgnoreInvalid:      *ignoreInvalid,
 		MissedCleavages:    *missedCleavages,
 		OutFormat:          *outFormat,
 		PeptideProbability: *pepprob,
