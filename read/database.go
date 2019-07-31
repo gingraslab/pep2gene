@@ -34,7 +34,7 @@ func proteinEntry(id string) string {
 }
 
 func sequenceNames(line string) (map[string]string, bool) {
-	geneIDEntry, _ := regexp.Compile("^>..\\|[\\d\\w_-]+\\|gn\\|([\\w-]+):(\\d+)")
+	geneIDEntry, _ := regexp.Compile("gn\\|([\\w-]+):(\\d+)")
 	if geneIDEntry.MatchString(line) {
 		matches := geneIDEntry.FindStringSubmatch(line)
 		description := map[string]string{
