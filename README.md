@@ -124,14 +124,12 @@ The database and peptide file must be located in the working directory Docker/Si
 
 **_-db (database)_**
 
-The search database is expected to be in FASTA format, with headers following this convention:
-> \>xx|xxxxxxxxx|gn|\<gene symbol>:\<Entrez gene ID>
+The search database is expected to be in FASTA format, with headers containing the following string
+> gn|\<gene symbol>:\<Entrez gene ID>
 
 E.G:
 
 > \>gi|22538794|gn|PDCD10:11235| programmed cell death protein 10 [Homo sapiens]
-
-While pep2gene does try to parse the accession and gene name, currently only the gene symbol and gene ID are used.
 
 **_-enzyme_**
 
@@ -174,7 +172,7 @@ The name of the enzyme must match one of the names listed above.
 
 Sequences that do not conform to the required header format
 
-> \>xx|xxxxxxxxx|gn|\<gene symbol>:\<Entrez gene ID>
+> gn|\<gene symbol>:\<Entrez gene ID>
 
 will be ignored by default since pep2gene will not know how to parse the gene symbol and gene ID, both of which are required.
 This can be overridden by setting this argument to `false`. When this argument is set to false, any sequences for which a symbol
