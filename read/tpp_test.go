@@ -27,6 +27,10 @@ var tppText = `<sample_enzyme name="trypsin">
 <modification_info modified_peptide="JK[129]L">
 <peptideprophet_result probability="0.9">
 </peptideprophet_result>
+</search_hit>
+<search_hit peptide="MNO">
+<peptideprophet_result probability="0.95">
+</peptideprophet_result>
 </search_hit>`
 
 func TestTPP(t *testing.T) {
@@ -44,7 +48,6 @@ func TestTPP(t *testing.T) {
 		0444,
 	)
 
-	
 	// TEST1: infer enzyme.
 	file, _ := fs.Instance.Open("test/testfile.txt")
 	actualPeptides, actualPeptideMap, actualEnzyme := tpp(file, 0.85, true)
@@ -52,11 +55,13 @@ func TestTPP(t *testing.T) {
 		"ABC":      "ABC",
 		"GHI":      "GHI",
 		"JK[129]L": "JKL",
+		"MNO":      "MNO",
 	}
 	expectedPeptides := []types.Peptide{
 		{Modified: "ABC", Sequence: "ABC"},
 		{Modified: "GHI", Sequence: "GHI"},
 		{Modified: "JK[129]L", Sequence: "JKL"},
+		{Modified: "MNO", Sequence: "MNO"},
 	}
 	assert.Equal(t, expectedPeptides, actualPeptides, "Should parse correct peptides from file")
 	assert.Equal(t, expectedPeptideMap, actualPeptideMap, "Should create a map of modified peptides to raw sequence")

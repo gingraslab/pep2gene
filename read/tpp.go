@@ -13,7 +13,7 @@ import (
 func tpp(file afero.File, peptideProbabilty float64, inferEnzyme bool) ([]types.Peptide, map[string]string, string) {
 	enzymeRegex, _ := regexp.Compile("^<sample_enzyme name=\"([\\w-/]+)\"")
 	modifiedRegex, _ := regexp.Compile("^<modification_info modified_peptide=\"([^\"]+)\"")
-	peptideRegex, _ := regexp.Compile("^<search_hit hit_rank=\"\\d+\" peptide=\"([^\"]+)\"")
+	peptideRegex, _ := regexp.Compile("^<search_hit.*peptide=\"([^\"]+)\"")
 	propabilityRegex, _ := regexp.Compile("^<peptideprophet_result probability=\"([0-9\\.]+)")
 
 	enzyme := ""
