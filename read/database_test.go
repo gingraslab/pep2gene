@@ -28,7 +28,10 @@ MKLLILTCLVAVALARPKHPIKHQGLPQEVLNENLLRFFVAPFPEVFGKE
 
 >Q9BYR8 SWISS-PROT:Q9BYR8 Tax_Id=9606 Gene_Symbol=KRTAP3-1;LOC100132802 Keratin-associated protein 3-1
 MYCCALRSCSVPTGPATTFCSFDKSCRCGVCLPSTCPHEISLLQPICCDTCPPPCCKPDT
-
+>gi|2222|gn|CCC:2222| Gene test 2 [Homo sapiens]
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+>sp|CAS2_BOVIN|
+MKLLILTCLVAVALARPKHPIKHQGLPQEVLNENLLRFFVAPFPEVFGKE
 `
 
 func TestAppendDatabase(t *testing.T) {
@@ -39,7 +42,7 @@ func TestAppendDatabase(t *testing.T) {
 		GeneID:   "123",
 		GeneName: "abc",
 		Sequence: "",
-		Valid: true,
+		Valid:    true,
 	}
 	database := make([]types.Protein, 0)
 	geneMap := make(map[string]string, 0)
@@ -52,7 +55,7 @@ func TestAppendDatabase(t *testing.T) {
 		GeneID:   "123",
 		GeneName: "abc",
 		Sequence: "",
-		Valid: true,
+		Valid:    true,
 	}
 	database = make([]types.Protein, 0)
 	geneMap = make(map[string]string, 0)
@@ -69,12 +72,12 @@ func TestAppendDatabase(t *testing.T) {
 		GeneID:   "123",
 		GeneName: "123",
 		Sequence: "",
-		Valid: false,
+		Valid:    false,
 	}
 	database = make([]types.Protein, 0)
 	geneMap = make(map[string]string, 0)
 	sequence.WriteString("XYZ")
-	actualDatabase, _  = appendDatabase(database, currProtein, &sequence, geneMap, true)
+	actualDatabase, _ = appendDatabase(database, currProtein, &sequence, geneMap, true)
 	expectedDatabase = []types.Protein{}
 	assert.Equal(t, expectedDatabase, actualDatabase, "Should not add sequence to protein database")
 }
@@ -122,43 +125,55 @@ func TestDatabase(t *testing.T) {
 			GeneID:   "11188",
 			GeneName: "NISCH",
 			Sequence: "MATARTFGPEREAEPAKEARVVGSELVDTYLPPKKIIGKNSRSLVEKREKDLEVYLQKLL",
-			Valid: true,
+			Valid:    true,
 		},
 		{
 			GeneID:   "5573",
 			GeneName: "PRKAR1A",
 			Sequence: "MESGSTAASEEARSLRECELYVQKHNIQALAGTRTDSREDEISPPPPNPVVKGRRRRGAILDDNERSDIFDAMFSVSFIAGETVIQQGDE",
-			Valid: true,
+			Valid:    true,
 		},
 		{
 			GeneID:   "56987",
 			GeneName: "BBX",
 			Sequence: "MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP",
-			Valid: true,
+			Valid:    true,
 		},
 		{
 			GeneID:   "1111",
 			GeneName: "BBX-1",
 			Sequence: "MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP",
-			Valid: true,
+			Valid:    true,
 		},
 		{
 			GeneID:   "280717",
 			GeneName: "ALB",
 			Sequence: "MKWVTFISLLLLFSSAYSRGV",
-			Valid: true,
+			Valid:    true,
 		},
 		{
 			GeneID:   "p-sp|CAS1_BOVIN|",
 			GeneName: "p-sp|CAS1_BOVIN|",
 			Sequence: "MKLLILTCLVAVALARPKHPIKHQGLPQEVLNENLLRFFVAPFPEVFGKE",
-			Valid: false,
+			Valid:    false,
 		},
 		{
 			GeneID:   "p-Q9BYR8",
 			GeneName: "p-Q9BYR8",
 			Sequence: "MYCCALRSCSVPTGPATTFCSFDKSCRCGVCLPSTCPHEISLLQPICCDTCPPPCCKPDT",
-			Valid: false,
+			Valid:    false,
+		},
+		{
+			GeneID:   "2222",
+			GeneName: "CCC",
+			Sequence: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+			Valid:    true,
+		},
+		{
+			GeneID:   "p-sp|CAS2_BOVIN|",
+			GeneName: "p-sp|CAS2_BOVIN|",
+			Sequence: "MKLLILTCLVAVALARPKHPIKHQGLPQEVLNENLLRFFVAPFPEVFGKE",
+			Valid:    false,
 		},
 	}
 	expectedGeneMap := map[string]string{
@@ -169,6 +184,8 @@ func TestDatabase(t *testing.T) {
 		"280717":           "ALB",
 		"p-sp|CAS1_BOVIN|": "p-sp|CAS1_BOVIN|",
 		"p-Q9BYR8":         "p-Q9BYR8",
+		"2222":             "CCC",
+		"p-sp|CAS2_BOVIN|": "p-sp|CAS2_BOVIN|",
 	}
 	actualDB, actualGeneMap := Database("test/testfile.txt", false)
 	assert.Equal(t, expectedDB, actualDB, "Should parse all proteins from database")
@@ -180,39 +197,46 @@ func TestDatabase(t *testing.T) {
 			GeneID:   "11188",
 			GeneName: "NISCH",
 			Sequence: "MATARTFGPEREAEPAKEARVVGSELVDTYLPPKKIIGKNSRSLVEKREKDLEVYLQKLL",
-			Valid: true,
+			Valid:    true,
 		},
 		{
 			GeneID:   "5573",
 			GeneName: "PRKAR1A",
 			Sequence: "MESGSTAASEEARSLRECELYVQKHNIQALAGTRTDSREDEISPPPPNPVVKGRRRRGAILDDNERSDIFDAMFSVSFIAGETVIQQGDE",
-			Valid: true,
+			Valid:    true,
 		},
 		{
 			GeneID:   "56987",
 			GeneName: "BBX",
 			Sequence: "MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP",
-			Valid: true,
+			Valid:    true,
 		},
 		{
 			GeneID:   "1111",
 			GeneName: "BBX-1",
 			Sequence: "MKGSNRNKDHSAEGEGVGKRPKRKCLQWHP",
-			Valid: true,
+			Valid:    true,
 		},
 		{
 			GeneID:   "280717",
 			GeneName: "ALB",
 			Sequence: "MKWVTFISLLLLFSSAYSRGV",
-			Valid: true,
+			Valid:    true,
+		},
+		{
+			GeneID:   "2222",
+			GeneName: "CCC",
+			Sequence: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+			Valid:    true,
 		},
 	}
 	expectedGeneMap = map[string]string{
-		"11188":            "NISCH",
-		"5573":             "PRKAR1A",
-		"56987":            "BBX",
-		"1111":             "BBX-1",
-		"280717":           "ALB",
+		"11188":  "NISCH",
+		"5573":   "PRKAR1A",
+		"56987":  "BBX",
+		"1111":   "BBX-1",
+		"280717": "ALB",
+		"2222":   "CCC",
 	}
 	actualDB, actualGeneMap = Database("test/testfile.txt", true)
 	assert.Equal(t, expectedDB, actualDB, "Should parse valid proteins from database")

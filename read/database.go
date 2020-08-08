@@ -19,9 +19,9 @@ func appendDatabase(
 	ignoreInvalid bool,
 ) ([]types.Protein, map[string]string) {
 	str := sequence.String()
+	sequence.Reset()
 	if str != "" && (!ignoreInvalid || (ignoreInvalid && currProtein.Valid)) {
 		currProtein.Sequence = str
-		sequence.Reset()
 		updatedDB := append(proteins, currProtein)
 		geneMap[currProtein.GeneID] = currProtein.GeneName
 		return updatedDB, geneMap
