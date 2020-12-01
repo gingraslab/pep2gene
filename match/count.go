@@ -2,7 +2,7 @@ package match
 
 import "github.com/knightjdr/pep2gene/types"
 
-func assignModPeptides(modified map[string]int, counts map[string]float64, weight float64) map[string]float64 {
+func assignModPeptides(modified map[string]float64, counts map[string]float64, weight float64) map[string]float64 {
 	updatedCounts := counts
 	for modPeptide, modCount := range modified {
 		updatedCounts[modPeptide] = weight * float64(modCount)

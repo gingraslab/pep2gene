@@ -57,31 +57,37 @@ type Genes map[string]*Gene
 
 // Parameters for command line arguments.
 type Parameters struct {
-	Database           string
-	Enzyme             string
-	FDR                float64
-	File               string
-	InferEnzyme        bool
-	IgnoreInvalid      bool
-	MapFile            string
-	MissedCleavages    int
-	OutFormat          string
-	PeptideProbability float64
-	Pipeline           string
+	Database                    string
+	Enzyme                      string
+	FDR                         float64
+	File                        string
+	IgnoreDecoys                bool
+	IgnoreInvalid               bool
+	InferEnzyme                 bool
+	MapFile                     string
+	MissedCleavages             int
+	Mscore                      float64
+	MscorePeptideExperimentWide float64
+	OutFormat                   string
+	PeakGroupRank               int
+	PeptideProbability          float64
+	Pipeline                    string
 }
 
-// Peptide contains the amino acid "Sequence" for a peptide and the "Modified" version.
+// Peptide contains the amino acid "Sequence" for a peptide and the "Modified" version, and
+// the intensity when using intensity based data (e.g. OpenSwath)
 type Peptide struct {
-	Modified string
-	Sequence string
+	Modified  string
+	Intensity float64
+	Sequence  string
 }
 
 // PeptideStat contains the spectral count for a peptide and the individual counts
 // for its modified forms
 type PeptideStat struct {
-	Count    int
+	Count    float64
 	Genes    []string
-	Modified map[string]int
+	Modified map[string]float64
 	Unique   bool
 }
 
@@ -97,7 +103,7 @@ func (p PeptideStat) Copy() *PeptideStat {
 		copyPeptideState.Genes = genes
 	}
 	if p.Modified != nil {
-		copyPeptideState.Modified = helpers.CopyStringIntMap(p.Modified)
+		copyPeptideState.Modified = helpers.CopyStringFloatMap(p.Modified)
 	}
 	return copyPeptideState
 }

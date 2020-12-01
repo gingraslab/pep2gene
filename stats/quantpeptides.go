@@ -5,23 +5,31 @@ import (
 	"github.com/knightjdr/pep2gene/types"
 )
 
-// QuantifyPeptides sums the spectral counts for peptides in both raw and modified forms.
+func getCount(peptide types.Peptide) float64 {
+	if peptide.Intensity != 0 {
+		return peptide.Intensity
+	}
+	return 1
+}
+
+// QuantifyPeptides sums the spectral counts or intensities for peptides in both raw and modified forms.
 func QuantifyPeptides(peptides []types.Peptide) types.Peptides {
-	spectralCounts := make(types.Peptides)
+	counts := make(types.Peptides)
 	for _, peptide := range peptides {
-		if _, ok := spectralCounts[peptide.Sequence]; ok {
-			spectralCounts[peptide.Sequence].Count++
-			if _, ok := spectralCounts[peptide.Sequence].Modified[peptide.Modified]; ok {
-				spectralCounts[peptide.Sequence].Modified[peptide.Modified]++
+		count := getCount(peptide)
+		if _, ok := counts[peptide.Sequence]; ok {
+			counts[peptide.Sequence].Count += count
+			if _, ok := counts[peptide.Sequence].Modified[peptide.Modified]; ok {
+				counts[peptide.Sequence].Modified[peptide.Modified] += count
 			} else {
-				spectralCounts[peptide.Sequence].Modified[peptide.Modified] = 1
+				counts[peptide.Sequence].Modified[peptide.Modified] = count
 			}
 		} else {
-			spectralCounts[peptide.Sequence] = &types.PeptideStat{
-				Count:    1,
-				Modified: map[string]int{peptide.Modified: 1},
+			counts[peptide.Sequence] = &types.PeptideStat{
+				Count:    count,
+				Modified: map[string]float64{peptide.Modified: count},
 			}
 		}
 	}
-	return spectralCounts
+	return counts
 }

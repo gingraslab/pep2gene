@@ -107,18 +107,35 @@ The database and peptide file must be located in the working directory Docker/Si
 
 ### Flags
 
+#### General
 | Name | Description | Required | Default |
 |------|-------------|----------|---------|
 | -db | FASTA database | true | |
 | -enzyme | digestion enzyme | false | |
-| -fdr | MSPLIT peptide FDR | false | 0.01 |
 | -file | peptide file | true | |
 | -ignoreinvalid | ignore sequences with an invalid header | false | true |
 | -inferenzyzme | infer the digestive enzyme | false | false |
 | -missedcleavages | number of missed cleavages | false | 0 |
 | -output | output file format | false | json |
-| -pepprob | TPP peptide probability | false | 0.85 |
 | -pipeline | search pipeline | false | TPP |
+
+#### MSPLIT
+| Name | Description | Required | Default |
+|------|-------------|----------|---------|
+| -fdr | MSPLIT peptide FDR | false | 0.01 |
+
+#### OpenSWATH
+| Name | Description | Required | Default |
+|------|-------------|----------|---------|
+| -ignoreDecoys | ignore decoy peptides | false | true |
+| -mscore | m_score for filtering | false | 0.05 |
+| -mscorepeptideexperimentwide | m_score_peptide_experiment_wide | false | 0.01 |
+| -peakgrouprank | peak_group_rank for filtering | false | 1 |
+
+#### TPP
+| Name | Description | Required | Default |
+|------|-------------|----------|---------|
+| -pepprob | TPP peptide probability | false | 0.85 |
 
 #### Notes
 
@@ -153,20 +170,17 @@ The available enzymes are:
 
 **_-fdr_**
 
-The FDR is used for parsing high-quality peptides from MSPLIT results, both DDA and DIA. It is ignored when parsing TPP results.
+The FDR is used for parsing high-quality peptides from MSPLIT results, both DDA and DIA. It is ignored
+when parsing TPP results.
 
 **_-file_**
 
-pepXML files from TPP are supported, as are DDA and DIA output files from MSPLIT.
+pepXML files from TPP are supported, as are DDA and DIA output files from MSPLIT, as well as DIA files
+from OpenSwath.
 
-**_-inferenzyme_**
+**_-ignoredecoys_**
 
-pep2gene can infer the enzyme used to digest the sample, rather that requiring it to be input as an argument. However, currently
-the enzyme name can only be parsed from pepXML files that contain the `sample_enzyme` field:
-
-> <sample_enzyme name="trypsin">
-
-The name of the enzyme must match one of the names listed above.
+Ignore decoy peptides. Currently only implemented for OpenSWATH results.
 
 **_-ignoreinvalid_**
 
@@ -174,24 +188,51 @@ Sequences that do not conform to the required header format
 
 > gn|\<gene symbol>:\<Entrez gene ID>
 
-will be ignored by default since pep2gene will not know how to parse the gene symbol and gene ID, both of which are required.
-This can be overridden by setting this argument to `false`. When this argument is set to false, any sequences for which a symbol
-and ID can not be determined will be identified by any leading non-whitespace characters in the header, and will be prefixed with
-`p-` to indicate they do not conform.  
+will be ignored by default since pep2gene will not know how to parse the gene symbol and gene ID, both
+of which are required. This can be overridden by setting this argument to `false`. When this argument is
+set to false, any sequences for which a symbol and ID can not be determined will be identified by any
+leading non-whitespace characters in the header, and will be prefixed with `p-` to indicate they do
+not conform.  
+
+**_-inferenzyme_**
+
+pep2gene can infer the enzyme used to digest the sample, rather that requiring it to be input as an
+argument. However, currently the enzyme name can only be parsed from pepXML files that contain the
+`sample_enzyme` field:
+
+> <sample_enzyme name="trypsin">
+
+The name of the enzyme must match one of the names listed above.
+
+**_-mscore_**
+
+m_score for filtering OpenSWATH results. Peptides with an m_score less than or equal to this value will be used.
+
+**_-mscorepeptideexperimentwide_**
+
+m_score_peptide_experiment_wide for filtering OpenSWATH results. Peptides with an m_score_peptide_experiment_wide less than or equal to this value will be used.
 
 **_-output_**
 
-Results can be output in either json (default) or txt format. The txt format is a legacy format that we do not recommend using. See the [Output](#output) section for a detailed description of each format.
+Results can be output in either json (default) or txt format. The txt format is a legacy format that we do
+not recommend using. See the [Output](#output) section for a detailed description of each format.
+
+**_-peakgrouprank_**
+
+Peak group rank (peak_group_rank) to filter OpenSwath results by. The default is `1` so peptides with
+that value will be used. A value of `2` would use peptides with a value of either `1` or `2`.
 
 **_-pepprob_**
 
-The peptide probability for parsing high-quality peptides from TPP results. It is ignored when parsing MSPLIT results.
+The peptide probability for parsing high-quality peptides from TPP results. It is ignored when parsing
+MSPLIT results.
 
 **_-pipeline_**
 
 The analysis pipeline used for searching peptides. The options are:
 * MSPLIT_DDA
 * MSPLIT_DIA
+* OPENSWATH
 * TPP
 
 ## Output
@@ -278,7 +319,7 @@ identified in the sample.
     }
   }
 }
-````
+```
 
 ### txt
 

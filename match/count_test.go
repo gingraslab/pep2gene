@@ -26,14 +26,14 @@ func TestCount(t *testing.T) {
 		"ABC": &types.PeptideStat{
 			Count: 15,
 			Genes: []string{"1", "3"},
-			Modified: map[string]int{
+			Modified: map[string]float64{
 				"ABC": 15,
 			},
 		},
 		"DEF": &types.PeptideStat{
 			Count: 20,
 			Genes: []string{"1"},
-			Modified: map[string]int{
+			Modified: map[string]float64{
 				"DEF":      15,
 				"DE[mod]F": 5,
 			},
@@ -41,7 +41,7 @@ func TestCount(t *testing.T) {
 		"GHI": &types.PeptideStat{
 			Count: 30,
 			Genes: []string{"1", "2", "3"},
-			Modified: map[string]int{
+			Modified: map[string]float64{
 				"GHI":      15,
 				"GH[mod]I": 15,
 			},
@@ -49,7 +49,7 @@ func TestCount(t *testing.T) {
 		"JKL": &types.PeptideStat{
 			Count: 20,
 			Genes: []string{"2", "4"},
-			Modified: map[string]int{
+			Modified: map[string]float64{
 				"JKL": 20,
 			},
 		},

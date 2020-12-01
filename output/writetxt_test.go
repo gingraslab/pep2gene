@@ -23,10 +23,10 @@ func TestWriteTXT(t *testing.T) {
 		FDR:      0.01,
 		File:     "file.txt",
 		Genes: map[string]*Gene{
-			"1": &Gene{
+			"1": {
 				Name: "one",
 				Peptides: map[string]Peptide{
-					"AAA": Peptide{
+					"AAA": {
 						AllottedSpectralCount: 4,
 						TotalSpectralCount:    4,
 						Unique:                true,
@@ -40,16 +40,16 @@ func TestWriteTXT(t *testing.T) {
 				Unique:        1,
 				UniqueShared:  0,
 			},
-			"2": &Gene{
+			"2": {
 				Name: "two",
 				Peptides: map[string]Peptide{
-					"BBB": Peptide{
+					"BBB": {
 						AllottedSpectralCount: 1,
 						TotalSpectralCount:    3,
 						Unique:                false,
 						UniqueShared:          false,
 					},
-					"CCC[115]": Peptide{
+					"CCC[115]": {
 						AllottedSpectralCount: 2,
 						TotalSpectralCount:    4,
 						Unique:                false,

@@ -23,21 +23,21 @@ func TestSummarizePeptides(t *testing.T) {
 	peptides := types.Peptides{
 		"AAA": &types.PeptideStat{
 			Genes: []string{"1"},
-			Modified: map[string]int{
+			Modified: map[string]float64{
 				"AAA": 3,
 			},
 			Unique: true,
 		},
 		"BBB": &types.PeptideStat{
 			Genes: []string{"1"},
-			Modified: map[string]int{
+			Modified: map[string]float64{
 				"BBB": 2,
 			},
 			Unique: false,
 		},
 		"CCC": &types.PeptideStat{
 			Genes: []string{"1"},
-			Modified: map[string]int{
+			Modified: map[string]float64{
 				"CCC[155]": 2,
 			},
 			Unique: true,
@@ -46,19 +46,19 @@ func TestSummarizePeptides(t *testing.T) {
 
 	actual := summarizePeptides(genes, peptideCount, peptides, peptideMap)
 	expected := map[string]Peptide{
-		"AAA": Peptide{
+		"AAA": {
 			AllottedSpectralCount: 3,
 			TotalSpectralCount:    3,
 			Unique:                true,
 			UniqueShared:          false,
 		},
-		"BBB": Peptide{
+		"BBB": {
 			AllottedSpectralCount: 1,
 			TotalSpectralCount:    2,
 			Unique:                false,
 			UniqueShared:          false,
 		},
-		"CCC[155]": Peptide{
+		"CCC[155]": {
 			AllottedSpectralCount: 2,
 			TotalSpectralCount:    2,
 			Unique:                true,
@@ -82,21 +82,21 @@ func TestSummarizePeptides(t *testing.T) {
 	peptides = types.Peptides{
 		"AAA": &types.PeptideStat{
 			Genes: []string{"1", "2"},
-			Modified: map[string]int{
+			Modified: map[string]float64{
 				"AAA": 3,
 			},
 			Unique: false,
 		},
 		"BBB": &types.PeptideStat{
 			Genes: []string{"1", "2"},
-			Modified: map[string]int{
+			Modified: map[string]float64{
 				"BBB": 2,
 			},
 			Unique: false,
 		},
 		"CCC": &types.PeptideStat{
 			Genes: []string{"1", "2", "3"},
-			Modified: map[string]int{
+			Modified: map[string]float64{
 				"CCC[155]": 3,
 			},
 			Unique: false,
@@ -105,19 +105,19 @@ func TestSummarizePeptides(t *testing.T) {
 
 	actual = summarizePeptides(genes, peptideCount, peptides, peptideMap)
 	expected = map[string]Peptide{
-		"AAA": Peptide{
+		"AAA": {
 			AllottedSpectralCount: 1.5,
 			TotalSpectralCount:    3,
 			Unique:                false,
 			UniqueShared:          true,
 		},
-		"BBB": Peptide{
+		"BBB": {
 			AllottedSpectralCount: 1,
 			TotalSpectralCount:    2,
 			Unique:                false,
 			UniqueShared:          true,
 		},
-		"CCC[155]": Peptide{
+		"CCC[155]": {
 			AllottedSpectralCount: 1,
 			TotalSpectralCount:    3,
 			Unique:                false,
@@ -171,21 +171,21 @@ func TestFormat(t *testing.T) {
 	peptides := types.Peptides{
 		"AAA": &types.PeptideStat{
 			Genes: []string{"1"},
-			Modified: map[string]int{
+			Modified: map[string]float64{
 				"AAA": 4,
 			},
 			Unique: true,
 		},
 		"BBB": &types.PeptideStat{
 			Genes: []string{"1", "2", "3"},
-			Modified: map[string]int{
+			Modified: map[string]float64{
 				"BBB": 3,
 			},
 			Unique: false,
 		},
 		"CCC": &types.PeptideStat{
 			Genes: []string{"2", "3"},
-			Modified: map[string]int{
+			Modified: map[string]float64{
 				"CCC[115]": 4,
 			},
 			Unique: false,
@@ -199,16 +199,16 @@ func TestFormat(t *testing.T) {
 		FDR:      0.01,
 		File:     "file.txt",
 		Genes: map[string]*Gene{
-			"1": &Gene{
+			"1": {
 				Name: "one",
 				Peptides: map[string]Peptide{
-					"AAA": Peptide{
+					"AAA": {
 						AllottedSpectralCount: 4,
 						TotalSpectralCount:    4,
 						Unique:                true,
 						UniqueShared:          false,
 					},
-					"BBB": Peptide{
+					"BBB": {
 						AllottedSpectralCount: 1,
 						TotalSpectralCount:    3,
 						Unique:                false,
@@ -222,16 +222,16 @@ func TestFormat(t *testing.T) {
 				Unique:        1,
 				UniqueShared:  0,
 			},
-			"2": &Gene{
+			"2": {
 				Name: "two",
 				Peptides: map[string]Peptide{
-					"BBB": Peptide{
+					"BBB": {
 						AllottedSpectralCount: 1,
 						TotalSpectralCount:    3,
 						Unique:                false,
 						UniqueShared:          false,
 					},
-					"CCC[115]": Peptide{
+					"CCC[115]": {
 						AllottedSpectralCount: 2,
 						TotalSpectralCount:    4,
 						Unique:                false,

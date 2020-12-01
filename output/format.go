@@ -36,7 +36,7 @@ type Gene struct {
 // Peptide is summary of a gene's peptides for output.
 type Peptide struct {
 	AllottedSpectralCount float64 `json:"allottedSpectralCount"`
-	TotalSpectralCount    int     `json:"totalSpectralCount"`
+	TotalSpectralCount    float64 `json:"totalSpectralCount"`
 	Unique                bool    `json:"unique"`
 	UniqueShared          bool    `json:"uniqueShared"`
 }

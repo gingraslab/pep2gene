@@ -21,24 +21,32 @@ func TestParseFlags(t *testing.T) {
 		"-enzyme", "Trypsin",
 		"-fdr", "0.05",
 		"-file", "peptide.txt",
+		"-ignoredecoys=false",
 		"-ignoreinvalid=false",
 		"-inferenzyme",
 		"-missedcleavages", "2",
+		"-mscore", "0.1",
+		"-mscorepeptideexperimentwide", "0.1",
 		"-output", "json",
+		"-peakgrouprank", "2",
 		"-pepprob", "0.9",
 		"-pipeline", "MSPLIT_DDA",
 	}
 	wantArgs := types.Parameters{
-		Database:           "database.fasta",
-		Enzyme:             "trypsin",
-		FDR:                0.05,
-		File:               "peptide.txt",
-		IgnoreInvalid:      false,
-		InferEnzyme:        true,
-		MissedCleavages:    2,
-		OutFormat:          "json",
-		PeptideProbability: 0.9,
-		Pipeline:           "MSPLIT_DDA",
+		Database:                    "database.fasta",
+		Enzyme:                      "trypsin",
+		FDR:                         0.05,
+		File:                        "peptide.txt",
+		IgnoreDecoys:                false,
+		IgnoreInvalid:               false,
+		InferEnzyme:                 true,
+		MissedCleavages:             2,
+		Mscore:                      0.1,
+		MscorePeptideExperimentWide: 0.1,
+		OutFormat:                   "json",
+		PeakGroupRank:               2,
+		PeptideProbability:          0.9,
+		Pipeline:                    "msplit_dda",
 	}
 	args, err := parseFlags()
 	assert.Nil(t, err, "Should not return an error when all required command line arguments are present")
@@ -49,15 +57,19 @@ func TestParseFlags(t *testing.T) {
 		"cmd",
 	}
 	wantArgs = types.Parameters{
-		Database:           "",
-		FDR:                0.01,
-		File:               "",
-		IgnoreInvalid:      true,
-		InferEnzyme:        false,
-		MissedCleavages:    0,
-		OutFormat:          "json",
-		PeptideProbability: 0.85,
-		Pipeline:           "TPP",
+		Database:                    "",
+		FDR:                         0.01,
+		File:                        "",
+		IgnoreDecoys:                true,
+		IgnoreInvalid:               true,
+		InferEnzyme:                 false,
+		MissedCleavages:             0,
+		Mscore:                      0.05,
+		MscorePeptideExperimentWide: 0.01,
+		OutFormat:                   "json",
+		PeakGroupRank:               1,
+		PeptideProbability:          0.85,
+		Pipeline:                    "tpp",
 	}
 	wantErr := errors.New("missing FASTA database; missing search result peptide file")
 	args, err = parseFlags()
@@ -75,9 +87,9 @@ func TestParseFlags(t *testing.T) {
 		"-missedcleavages", "2",
 		"-output", "Unknown",
 		"-pepprob", "0.9",
-		"-pipeline", "Unknown",
+		"-pipeline", "unknown",
 	}
 	args, _ = parseFlags()
 	assert.Equal(t, "json", args.OutFormat, "Should set output format to tsv when arg not recognized")
-	assert.Equal(t, "TPP", args.Pipeline, "Should set pipeline to TPP when arg not recognized")
+	assert.Equal(t, "tpp", args.Pipeline, "Should set pipeline to TPP when arg not recognized")
 }

@@ -55,7 +55,7 @@ func TestPeptideStatCopy(t *testing.T) {
 	originalPeptideStat := &PeptideStat{
 		Count: 5,
 		Genes: []string{"a", "b"},
-		Modified: map[string]int{
+		Modified: map[string]float64{
 			"ABC": 1,
 			"DEF": 2,
 		},
@@ -69,14 +69,14 @@ func TestPeptideStatCopy(t *testing.T) {
 	// TEST2
 	copiedPeptideStat.Count = 10
 	copiedPeptideStat.Genes = []string{"b", "c"}
-	copiedPeptideStat.Modified = map[string]int{
+	copiedPeptideStat.Modified = map[string]float64{
 		"ABC": 2,
 		"DEF": 4,
 	}
 	expected := &PeptideStat{
 		Count: 5,
 		Genes: []string{"a", "b"},
-		Modified: map[string]int{
+		Modified: map[string]float64{
 			"ABC": 1,
 			"DEF": 2,
 		},

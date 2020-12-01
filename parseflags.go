@@ -16,25 +16,33 @@ func parseFlags() (params types.Parameters, err error) {
 	enzyme := args.String("enzyme", "", "Cleavage enzyme")
 	fdr := args.Float64("fdr", 0.01, "FDR cutoff")
 	file := args.String("file", "", "File to process")
-	inferEnzyme := args.Bool("inferenzyme", false, "Infer digestive enzyme")
+	ignoreDecoys := args.Bool("ignoredecoys", true, "Ignore decoy peptides")
 	ignoreInvalid := args.Bool("ignoreinvalid", true, "Ignore invalid sequences")
+	inferEnzyme := args.Bool("inferenzyme", false, "Infer digestive enzyme")
 	missedCleavages := args.Int("missedcleavages", 0, "Max number of missed cleavages")
+	mScore := args.Float64("mscore", 0.05, "m_score to filter by")
+	mScorePeptideExperimentWide := args.Float64("mscorepeptideexperimentwide", 0.01, "m_score_peptide_experiment_wide to filter by")
 	outFormat := args.String("output", "tsv", "Output file format")
+	peakGroupRank := args.Int("peakgrouprank", 1, "peak_group_rank to filter by")
 	pepprob := args.Float64("pepprob", 0.85, "TPP peptide probability cutoff")
-	pipeline := args.String("pipeline", "TPP", "Search engine type, should be one of MSPLIT_DDA, MSPLIT_DIA, TPP")
+	pipeline := args.String("pipeline", "TPP", "Search engine type, should be one of MSPLIT_DDA, MSPLIT_DIA, OPENSWATH, TPP")
 	args.Parse(os.Args[1:])
 
 	params = types.Parameters{
-		Database:           *database,
-		Enzyme:             strings.ToLower(*enzyme),
-		FDR:                *fdr,
-		File:               *file,
-		InferEnzyme:        *inferEnzyme,
-		IgnoreInvalid:      *ignoreInvalid,
-		MissedCleavages:    *missedCleavages,
-		OutFormat:          *outFormat,
-		PeptideProbability: *pepprob,
-		Pipeline:           *pipeline,
+		Database:                    *database,
+		Enzyme:                      strings.ToLower(*enzyme),
+		FDR:                         *fdr,
+		File:                        *file,
+		IgnoreDecoys:                *ignoreDecoys,
+		IgnoreInvalid:               *ignoreInvalid,
+		InferEnzyme:                 *inferEnzyme,
+		MissedCleavages:             *missedCleavages,
+		Mscore:                      *mScore,
+		MscorePeptideExperimentWide: *mScorePeptideExperimentWide,
+		OutFormat:                   *outFormat,
+		PeakGroupRank:               *peakGroupRank,
+		PeptideProbability:          *pepprob,
+		Pipeline:                    strings.ToLower(*pipeline),
 	}
 
 	// Validate arguments.
@@ -54,12 +62,13 @@ func parseFlags() (params types.Parameters, err error) {
 
 	// Set TPP as the default search engine to parse if selected engine is not recognized.
 	availablePipelines := map[string]bool{
-		"MSPLIT_DDA": true,
-		"MSPLIT_DIA": true,
-		"TPP":        true,
+		"msplit_dda": true,
+		"msplit_dia": true,
+		"openswath":  true,
+		"tpp":        true,
 	}
 	if _, ok := availablePipelines[params.Pipeline]; !ok {
-		params.Pipeline = "TPP"
+		params.Pipeline = "tpp"
 	}
 
 	// Set tsv as the default output format if selected format is not recognized.

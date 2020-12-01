@@ -17,7 +17,7 @@ func main() {
 	}
 
 	// Read peptides from file.
-	peptideList, peptideMap, inferredEnzyme := read.Peptides(args.File, args.Pipeline, args.FDR, args.PeptideProbability, args.InferEnzyme)
+	peptideList, peptideMap, inferredEnzyme := read.Peptides(args)
 
 	// Count spectra.
 	peptideSummary := stats.QuantifyPeptides(peptideList)

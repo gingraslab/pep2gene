@@ -10,8 +10,9 @@ import (
 )
 
 // Peptides is an interface for opening a peptide file and passing it to the correct parser
-func Peptides(filename string, pipeline string, fdr, peptideProbabilty float64, inferEnzyme bool) ([]types.Peptide, map[string]string, string) {
-	file, err := fs.Instance.Open(filename)
+// func Peptides(filename string, pipeline string, fdr, peptideProbabilty float64, inferEnzyme bool) ([]types.Peptide, map[string]string, string) {
+func Peptides(options types.Parameters) ([]types.Peptide, map[string]string, string) {
+	file, err := fs.Instance.Open(options.File)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -20,12 +21,14 @@ func Peptides(filename string, pipeline string, fdr, peptideProbabilty float64, 
 	enzyme := ""
 	peptideMap := make(map[string]string, 0)
 	peptides := make([]types.Peptide, 0)
-	if pipeline == "TPP" {
-		peptides, peptideMap, enzyme = tpp(file, peptideProbabilty, inferEnzyme)
-	} else if pipeline == "MSPLIT_DDA" {
-		peptides, peptideMap = msplitDDA(file, fdr)
-	} else if pipeline == "MSPLIT_DIA" {
+	if options.Pipeline == "tpp" {
+		peptides, peptideMap, enzyme = tpp(file, options.PeptideProbability, options.InferEnzyme)
+	} else if options.Pipeline == "msplit_dda" {
+		peptides, peptideMap = msplitDDA(file, options.FDR)
+	} else if options.Pipeline == "msplit_dia" {
 		peptides, peptideMap = msplitDIA(file)
+	} else if options.Pipeline == "openswath" {
+		peptides, peptideMap = openswath(file, options)
 	} else {
 		log.Fatalln(errors.New("Unknown pipeline"))
 	}

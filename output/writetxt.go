@@ -63,7 +63,7 @@ func writeTXT(file afero.File, genes map[string]*Gene) {
 			}
 			file.WriteString(
 				fmt.Sprintf(
-					"%[1]s;;%[2]d;;%[3]s\n",
+					"%[1]s;;%.[2]f;;%[3]s\n",
 					sequence,
 					peptideDetails.TotalSpectralCount,
 					unique,
