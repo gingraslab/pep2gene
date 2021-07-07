@@ -35,7 +35,7 @@ Otherwise it can be run as a container, using Docker for example.
 
 2. Clone repo
 ```
-git clone https://github.com/knightjdr/pep2gene.git
+git clone https://github.com/gingraslab/pep2gene.git
 cd pep2gene
 ```
 
@@ -51,17 +51,17 @@ The executable will be called `pep2gene`.
 #### Pull image (and rename - optional)
 
 ```
-docker pull knightjdr/pep2gene:v1.2.0
-docker tag knightjdr/pep2gene:v1.2.0 pep2gene
+docker pull ghcr.io/gingraslab/pep2gene:v1.4.0
+docker tag ghcr.io/gingraslab/pep2gene:v1.4.0 pep2gene
 ```
 
-Check for [versions](https://cloud.docker.com/repository/registry-1.docker.io/knightjdr/pep2gene/tags).
+Check for [versions](https://github.com/orgs/gingraslab/packages/container/pep2gene/versions).
 
 #### Build
 
 1. Clone repo
 ```
-git clone https://github.com/knightjdr/pep2gene.git
+git clone https://github.com/gingraslab/pep2gene.git
 cd pep2gene
 ```
 
@@ -81,7 +81,7 @@ docker build -t pep2genesing -f docker/singularity/Dockerfile .
 
 We do not provide a Singularity definition file but the Docker image can be used with Singularity provided it is built from the correct source. The Dockerfile found in `docker/standard/` was designed for Docker itself. While the image is small (~7mb), it does not work with Singularity. The Dockerfile found in `docker/singularity/` will build an image compatibly with Singularity although it is about twice the size (13MB).
 
-The images are also hosted at DockerHub in separate repos: [Docker](https://cloud.docker.com/repository/docker/knightjdr/pep2gene) and [Singularity](https://cloud.docker.com/repository/docker/knightjdr/pep2genesing).
+The images are also hosted at GitHub in separate repos: [Docker](https://github.com/orgs/gingraslab/packages/container/package/pep2gene) and [Singularity](https://github.com/orgs/gingraslab/packages/container/package/pep2genesing).
 
 ## Usage
 
@@ -100,7 +100,7 @@ docker run -v $(pwd):/files/ pep2gene -db="database.fasta" -file="sample.pepxml"
 ### Singularity
 
 ```
-singularity run -B ./:/files/ docker://knightjdr/pep2genesing:v1.2.0 -db="database.fasta" -file="sample.pepxml" -enzyme="trypsin"
+singularity run -B ./:/files/ docker://ghcr.io/gingraslab/pep2genesing:v1.4.0 -db="database.fasta" -file="sample.pepxml" -enzyme="trypsin"
 ```
 
 The database and peptide file must be located in the working directory Docker/Singularity is called from. Relative or nested paths will not work, i.e. `./some-directory/database.fasta` or `../database.fasta`. The output file will also be written to the working directory.
