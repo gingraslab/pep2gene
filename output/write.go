@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/knightjdr/pep2gene/fs"
-	"github.com/knightjdr/pep2gene/helpers"
+	"github.com/gingraslab/pep2gene/fs"
+	"github.com/gingraslab/pep2gene/helpers"
 )
 
 func outFileName(filePath, format string) string {

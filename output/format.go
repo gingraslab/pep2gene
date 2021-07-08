@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"sort"
 
-	"github.com/knightjdr/pep2gene/helpers"
-	"github.com/knightjdr/pep2gene/types"
+	"github.com/gingraslab/pep2gene/helpers"
+	"github.com/gingraslab/pep2gene/types"
 )
 
 // Data is a map of genes to their output summary.

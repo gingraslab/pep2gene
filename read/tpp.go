@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/knightjdr/pep2gene/types"
+	"github.com/gingraslab/pep2gene/types"
 	"github.com/spf13/afero"
 )
 

@@ -13,6 +13,8 @@
 
 .vscode
 
+vendor
+
 pep2gene
 testfiles
 test-cmd.md

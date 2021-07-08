@@ -1,4 +1,4 @@
-module github.com/knightjdr/pep2gene
+module github.com/gingraslab/pep2gene
 
 go 1.12
 

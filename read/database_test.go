@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/knightjdr/pep2gene/fs"
-	"github.com/knightjdr/pep2gene/types"
+	"github.com/gingraslab/pep2gene/fs"
+	"github.com/gingraslab/pep2gene/types"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )

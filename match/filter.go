@@ -1,6 +1,6 @@
 package match
 
-import "github.com/knightjdr/pep2gene/types"
+import "github.com/gingraslab/pep2gene/types"
 
 // Filter removes all genes from a peptide's list of matched genes that
 // have no evidence that they exist in the sample (subsumed genes).

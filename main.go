@@ -3,11 +3,11 @@ package main
 import (
 	"log"
 
-	"github.com/knightjdr/pep2gene/digestion"
-	"github.com/knightjdr/pep2gene/match"
-	"github.com/knightjdr/pep2gene/output"
-	"github.com/knightjdr/pep2gene/read"
-	"github.com/knightjdr/pep2gene/stats"
+	"github.com/gingraslab/pep2gene/digestion"
+	"github.com/gingraslab/pep2gene/match"
+	"github.com/gingraslab/pep2gene/output"
+	"github.com/gingraslab/pep2gene/read"
+	"github.com/gingraslab/pep2gene/stats"
 )
 
 func main() {

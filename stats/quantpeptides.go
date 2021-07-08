@@ -2,7 +2,7 @@
 package stats
 
 import (
-	"github.com/knightjdr/pep2gene/types"
+	"github.com/gingraslab/pep2gene/types"
 )
 
 func getCount(peptide types.Peptide) float64 {

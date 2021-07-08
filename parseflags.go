@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/knightjdr/pep2gene/types"
+	"github.com/gingraslab/pep2gene/types"
 )
 
 // ParseFlags parses command line arguments.

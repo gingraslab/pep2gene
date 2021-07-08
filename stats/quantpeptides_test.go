@@ -3,7 +3,7 @@ package stats
 import (
 	"testing"
 
-	"github.com/knightjdr/pep2gene/types"
+	"github.com/gingraslab/pep2gene/types"
 	"github.com/stretchr/testify/assert"
 )
 

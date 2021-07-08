@@ -2,7 +2,7 @@
 package types
 
 import (
-	"github.com/knightjdr/pep2gene/helpers"
+	"github.com/gingraslab/pep2gene/helpers"
 )
 
 // Gene contains based information: 1) is the gene subsumed by another, 2) The

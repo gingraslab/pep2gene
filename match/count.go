@@ -1,6 +1,6 @@
 package match
 
-import "github.com/knightjdr/pep2gene/types"
+import "github.com/gingraslab/pep2gene/types"
 
 func assignModPeptides(modified map[string]float64, counts map[string]float64, weight float64) map[string]float64 {
 	updatedCounts := counts
